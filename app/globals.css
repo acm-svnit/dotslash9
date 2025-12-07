@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Upheav";
+  src: url("/upheav.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .hero-background {
   min-height: 100vh;
   background-color: #000;

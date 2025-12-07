@@ -60,6 +60,7 @@ export const Game: React.FC = () => {
   const enemySpawnAccumulatorRef = useRef(0);
 
   const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -265,6 +266,7 @@ export const Game: React.FC = () => {
             if (overlap) {
               bulletAlive[i] = false;
               enemyAlive[j] = false;
+              setScore((prev) => prev + 1);
               break;
             }
           }
@@ -324,6 +326,21 @@ export const Game: React.FC = () => {
       {enemies.map((e) => (
         <EnemySprite key={e.id} x={e.x} top={e.top} />
       ))}
+
+      {/* Score */}
+      <div
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          color: "#fff",
+          fontSize: "12px",
+          fontFamily: "Upheav, sans-serif",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+          zIndex: 1000,
+        }}>
+        Score: {score}
+      </div>
     </div>
   );
 };
