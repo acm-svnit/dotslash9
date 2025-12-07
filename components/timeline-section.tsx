@@ -64,7 +64,8 @@ export default function TimelineSection() {
       style={{
         minHeight: "100vh",
         backgroundColor: "#000",
-        padding: "clamp(20px, 4vh, 60px) clamp(10px, 2vw, 40px)",
+        padding:
+          "clamp(80px, 10vh, 120px) clamp(10px, 2vw, 40px) clamp(20px, 4vh, 60px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
