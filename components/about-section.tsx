@@ -279,7 +279,7 @@ export default function AboutSection() {
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
                 }}>
-                ₹50,000
+                ₹80,000
               </p>
             </div>
             <div
@@ -328,7 +328,7 @@ export default function AboutSection() {
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
                 }}>
-                ₹30,000
+                ₹50,000
               </p>
             </div>
             <div
@@ -377,7 +377,7 @@ export default function AboutSection() {
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
                 }}>
-                ₹20,000
+                ₹30,000
               </p>
             </div>
           </div>
