@@ -7,11 +7,8 @@ import {
   SHIP_FRAME_HEIGHT,
 } from "@/components/ship-sprite";
 import { BulletSprite, BULLET_SIZE } from "@/components/bullet-sprite";
-import {
-  EnemySprite,
-  ENEMY_WIDTH,
-  ENEMY_HEIGHT,
-} from "@/components/enemy-sprite";
+import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "@/components/enemy-sprite";
+import { useSpriteScale } from "@/components/use-sprite-scale";
 
 const SHIP_BOTTOM_OFFSET = 80;
 
@@ -43,6 +40,7 @@ type Enemy = {
 };
 
 export const Game: React.FC = () => {
+  const spriteScale = useSpriteScale();
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
   const [ship, setShip] = useState<ShipState>({ x: 0, v: 0 });
@@ -71,13 +69,15 @@ export const Game: React.FC = () => {
 
       setShip((prev) => {
         if (prev.x === 0 && prev.v === 0) {
-          const x = width / 2 - SHIP_FRAME_WIDTH / 2;
+          const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+          const x = width / 2 - shipScaledWidth / 2;
           const next = { x, v: 0 };
           shipRef.current = next;
           return next;
         }
 
-        const maxX = Math.max(0, width - SHIP_FRAME_WIDTH);
+        const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+        const maxX = Math.max(0, width - shipScaledWidth);
         const clampedX = Math.min(Math.max(0, prev.x), maxX);
         const next = { ...prev, x: clampedX };
         shipRef.current = next;
@@ -88,7 +88,7 @@ export const Game: React.FC = () => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [spriteScale]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -111,11 +111,14 @@ export const Game: React.FC = () => {
         lastShotTimeRef.current = now;
 
         const shipX = shipRef.current.x;
+        const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+        const shipScaledHeight = SHIP_FRAME_HEIGHT * spriteScale;
+        const bulletScaledSize = BULLET_SIZE * spriteScale;
 
         const id = bulletIdRef.current++;
-        const bulletX = shipX + SHIP_FRAME_WIDTH / 2 - BULLET_SIZE / 2;
+        const bulletX = shipX + shipScaledWidth / 2 - bulletScaledSize / 2;
         const bulletBottom =
-          SHIP_BOTTOM_OFFSET + SHIP_FRAME_HEIGHT - BULLET_SIZE / 2;
+          SHIP_BOTTOM_OFFSET + shipScaledHeight - bulletScaledSize / 2;
 
         const newBullets = [
           ...bulletsRef.current,
@@ -180,7 +183,8 @@ export const Game: React.FC = () => {
 
         x += v * deltaSeconds;
 
-        const maxX = width - SHIP_FRAME_WIDTH;
+        const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+        const maxX = width - shipScaledWidth;
         if (x < 0) {
           x = 0;
           if (v < 0) v = 0;
@@ -208,17 +212,20 @@ export const Game: React.FC = () => {
 
           for (let i = 0; i < spawns; i++) {
             const id = enemyIdRef.current++;
-            const x = Math.random() * Math.max(1, width - ENEMY_WIDTH);
-            enemies = [...enemies, { id, x, top: -ENEMY_HEIGHT }];
+            const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
+            const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
+            const x = Math.random() * Math.max(1, width - enemyScaledWidth);
+            enemies = [...enemies, { id, x, top: -enemyScaledHeight }];
           }
         }
 
+        const bulletScaledSize = BULLET_SIZE * spriteScale;
         bullets = bullets
           .map((b) => ({
             ...b,
             bottom: b.bottom + BULLET_SPEED * deltaSeconds,
           }))
-          .filter((b) => b.bottom <= height + BULLET_SIZE);
+          .filter((b) => b.bottom <= height + bulletScaledSize);
 
         enemies = enemies.map((e) => ({
           ...e,
@@ -232,19 +239,22 @@ export const Game: React.FC = () => {
           if (!bulletAlive[i]) continue;
 
           const b = bullets[i];
+          const bulletScaledSize = BULLET_SIZE * spriteScale;
           const bulletLeft = b.x;
-          const bulletRight = b.x + BULLET_SIZE;
+          const bulletRight = b.x + bulletScaledSize;
           const bulletBottomY = height - b.bottom;
-          const bulletTopY = bulletBottomY - BULLET_SIZE;
+          const bulletTopY = bulletBottomY - bulletScaledSize;
 
           for (let j = 0; j < enemies.length; j++) {
             if (!enemyAlive[j]) continue;
 
             const e = enemies[j];
+            const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
+            const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
             const enemyLeft = e.x;
-            const enemyRight = e.x + ENEMY_WIDTH;
+            const enemyRight = e.x + enemyScaledWidth;
             const enemyTopY = e.top;
-            const enemyBottomY = e.top + ENEMY_HEIGHT;
+            const enemyBottomY = e.top + enemyScaledHeight;
 
             const overlap =
               bulletLeft < enemyRight &&
@@ -265,7 +275,8 @@ export const Game: React.FC = () => {
           if (!enemyAlive[j]) continue;
           const e = enemies[j];
 
-          if (e.top + ENEMY_HEIGHT >= height) {
+          const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
+          if (e.top + enemyScaledHeight >= height) {
             playerDead = true;
             continue;
           }
@@ -291,7 +302,7 @@ export const Game: React.FC = () => {
 
     animationFrameId = window.requestAnimationFrame(loop);
     return () => window.cancelAnimationFrame(animationFrameId);
-  }, [viewportSize, gameOver]);
+  }, [viewportSize, gameOver, spriteScale]);
 
   return (
     <div

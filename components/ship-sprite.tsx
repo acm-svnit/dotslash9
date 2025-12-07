@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useSpriteScale } from "./use-sprite-scale";
 
 export const SHIP_FRAME_WIDTH = 16;
 export const SHIP_FRAME_HEIGHT = 24;
@@ -21,6 +22,7 @@ export const ShipSprite: React.FC<ShipSpriteProps> = ({
   fps = 10,
 }) => {
   const [frameIndex, setFrameIndex] = useState(0);
+  const spriteScale = useSpriteScale();
 
   useEffect(() => {
     const frameDuration = 1000 / fps;
@@ -50,6 +52,8 @@ export const ShipSprite: React.FC<ShipSpriteProps> = ({
         backgroundRepeat: "no-repeat",
         backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
         imageRendering: "pixelated",
+        transform: `scale(${spriteScale})`,
+        transformOrigin: "bottom left",
       }}
     />
   );

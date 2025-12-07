@@ -1,13 +1,9 @@
-import { Game } from "@/components/game";
+import Hero from "@/components/hero";
 
 export default function HomePage() {
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#000",
-      }}>
-      <Game />
+    <main>
+      <Hero />
     </main>
   );
 }

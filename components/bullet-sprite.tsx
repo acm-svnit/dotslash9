@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useSpriteScale } from "./use-sprite-scale";
 
 export const BULLET_SIZE = 16;
 
@@ -10,6 +11,7 @@ type BulletSpriteProps = {
 };
 
 export const BulletSprite: React.FC<BulletSpriteProps> = ({ x, bottom }) => {
+  const spriteScale = useSpriteScale();
   return (
     <div
       style={{
@@ -22,6 +24,8 @@ export const BulletSprite: React.FC<BulletSpriteProps> = ({ x, bottom }) => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "0px 0px",
         imageRendering: "pixelated",
+        transform: `scale(${spriteScale})`,
+        transformOrigin: "bottom left",
       }}
     />
   );

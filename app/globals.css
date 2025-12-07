@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+.hero-background {
+  min-height: 100vh;
+  background-color: #000;
+  background-image: url('/bg2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+  .hero-background {
+    background-image: url('/bg1.png');
+  }
+}
