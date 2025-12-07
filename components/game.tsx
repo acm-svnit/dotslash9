@@ -390,13 +390,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               keysRef.current.left = false;
             }}
             style={{
-              width: "50px",
-              height: "50px",
+              width: "40px",
+              height: "40px",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               border: "2px solid #fff",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
-              fontSize: "20px",
+              fontSize: "18px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -432,13 +432,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               keysRef.current.right = false;
             }}
             style={{
-              width: "50px",
-              height: "50px",
+              width: "40px",
+              height: "40px",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               border: "2px solid #fff",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
-              fontSize: "20px",
+              fontSize: "18px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -461,13 +461,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               handleShoot();
             }}
             style={{
-              width: "50px",
-              height: "50px",
+              width: "40px",
+              height: "40px",
               backgroundColor: "rgba(255, 255, 255, 0.2)",
               border: "2px solid #fff",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
-              fontSize: "16px",
+              fontSize: "12px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -476,7 +476,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               userSelect: "none",
               touchAction: "manipulation",
             }}>
-            ⚡
+            FIRE
           </button>
         </div>
       )}

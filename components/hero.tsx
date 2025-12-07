@@ -64,39 +64,11 @@ export default function Hero({ bgReady }: HeroProps) {
     });
   }, [bgReady]);
 
-  const planets = [
-    { src: "/planet1.gif", top: "10%", left: "5%", size: "clamp(60px, 8vw, 120px)" },
-    { src: "/planet2.gif", top: "20%", right: "8%", size: "clamp(80px, 10vw, 150px)" },
-    { src: "/planet3.gif", bottom: "15%", left: "10%", size: "clamp(70px, 9vw, 130px)" },
-    { src: "/planet4.gif", bottom: "25%", right: "5%", size: "clamp(90px, 11vw, 160px)" },
-  ];
-
   return (
     <section
       ref={heroBgRef}
       className="hero-background"
       style={{ position: "relative", opacity: 0 }}>
-      {/* Planet GIFs */}
-      {planets.map((planet, index) => (
-        <img
-          key={index}
-          src={planet.src}
-          alt={`Planet ${index + 1}`}
-          style={{
-            position: "absolute",
-            top: planet.top,
-            bottom: planet.bottom,
-            left: planet.left,
-            right: planet.right,
-            width: planet.size,
-            height: planet.size,
-            objectFit: "contain",
-            imageRendering: "pixelated",
-            pointerEvents: "none",
-            zIndex: 1,
-          }}
-        />
-      ))}
       {showGame && heroBgReady && (
         <div
           ref={gameRef}
