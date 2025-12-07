@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ShipSprite,
   SHIP_FRAME_WIDTH,
@@ -42,9 +43,10 @@ type Enemy = {
 
 type GameProps = {
   onQuit?: () => void;
+  onPauseChange?: (isPaused: boolean) => void;
 };
 
-export const Game: React.FC<GameProps> = ({ onQuit }) => {
+export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
   const spriteScale = useSpriteScale();
   const { isMuted, toggleMute } = useAudio();
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
@@ -69,6 +71,11 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const [score, setScore] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -517,20 +524,20 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
         </button>
       </div>
 
-      {isPaused && (
+      {isPaused && mounted && createPortal(
         <div
           style={{
-            position: "absolute",
+            position: "fixed",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            width: "100vw",
+            height: "100vh",
             backgroundColor: "rgba(0, 0, 0, 0.8)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 2000,
+            zIndex: 99999,
           }}>
           <div
             style={{
@@ -583,6 +590,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
                     fontSize: "14px",
                     cursor: "pointer",
                     transition: "background-color 0.2s",
+                    flex: 1,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
@@ -609,6 +617,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
                     fontSize: "14px",
                     cursor: "pointer",
                     transition: "background-color 0.2s",
+                    flex: 1,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
@@ -645,7 +654,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
