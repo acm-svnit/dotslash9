@@ -53,6 +53,18 @@ main {
     width: clamp(800px, 90vw, 1200px) !important;
     height: clamp(800px, 90vw, 1200px) !important;
   }
+  
+  .planet-left-top {
+    left: 50% !important;
+    top: 0 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  
+  .planet-right-bottom {
+    right: 50% !important;
+    top: 100% !important;
+    transform: translate(50%, -50%) !important;
+  }
 }
 
 .bento-section {

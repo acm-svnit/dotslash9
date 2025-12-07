@@ -63,36 +63,74 @@ export default function AboutSection() {
           }}>
           About DOTSLASH
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mb-12">
-          {cardData.map((card, index) => (
-            <Card
-              key={index}
-              className="bg-[#060010] border-[#392e4e] text-white hover:border-[rgba(75,85,255,0.8)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(75,85,255,0.5)] overflow-hidden flex flex-col relative group p-4"
-            >
-              <div className="absolute inset-0 bg-linear-to-br from-[rgba(75,85,255,0.1)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
-              <div className="absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0" style={{ background: 'radial-gradient(circle at center, rgba(75,85,255,0.15) 0%, transparent 70%)' }} />
-              <div className="relative z-20 flex flex-col items-center text-center">
-                <div className="mb-2 flex items-center justify-center h-12">
-                  <img
-                    src={card.logo}
-                    alt={`Logo ${index + 1}`}
-                    className="max-h-full max-w-full object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
+        <div className="relative w-full max-w-4xl mb-12">
+          <img
+            src="/planet1.gif"
+            alt="Planet"
+            className="planet-left-top"
+            style={{
+              position: "absolute",
+              left: "0",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "clamp(100px, 15vw, 250px)",
+              height: "clamp(100px, 15vw, 250px)",
+              objectFit: "contain",
+              imageRendering: "pixelated",
+              pointerEvents: "none",
+              zIndex: 0,
+              opacity: 0.6,
+            }}
+          />
+          <img
+            src="/planet6.gif"
+            alt="Planet"
+            className="planet-right-bottom"
+            style={{
+              position: "absolute",
+              right: "0",
+              top: "50%",
+              transform: "translate(50%, -50%)",
+              width: "clamp(100px, 15vw, 250px)",
+              height: "clamp(100px, 15vw, 250px)",
+              objectFit: "contain",
+              imageRendering: "pixelated",
+              pointerEvents: "none",
+              zIndex: 0,
+              opacity: 0.6,
+            }}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full relative z-10">
+            {cardData.map((card, index) => (
+              <Card
+                key={index}
+                className="bg-[#060010] border-[#392e4e] text-white hover:border-[rgba(75,85,255,0.8)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(75,85,255,0.5)] overflow-hidden flex flex-col relative group p-4"
+              >
+                <div className="absolute inset-0 bg-linear-to-br from-[rgba(75,85,255,0.1)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
+                <div className="absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0" style={{ background: 'radial-gradient(circle at center, rgba(75,85,255,0.15) 0%, transparent 70%)' }} />
+                <div className="relative z-20 flex flex-col items-center text-center">
+                  <div className="mb-2 flex items-center justify-center h-12">
+                    <img
+                      src={card.logo}
+                      alt={`Logo ${index + 1}`}
+                      className="max-h-full max-w-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <h3 className="text-white font-semibold text-base mb-2 relative z-20">
+                    {card.title}
+                  </h3>
+                  <CardContent className="p-0 relative z-20">
+                    <p className="text-white/70 text-xs leading-tight" style={{ fontFamily: 'var(--font-sans)' }}>
+                      {card.paragraph}
+                    </p>
+                  </CardContent>
                 </div>
-                <h3 className="text-white font-semibold text-base mb-2 relative z-20">
-                  {card.title}
-                </h3>
-                <CardContent className="p-0 relative z-20">
-                  <p className="text-white/70 text-xs leading-tight" style={{ fontFamily: 'var(--font-sans)' }}>
-                    {card.paragraph}
-                  </p>
-                </CardContent>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
         <div className="w-full max-w-4xl text-center">
           <h3
