@@ -5,6 +5,13 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const cardData = [
   {
@@ -164,6 +171,34 @@ export default function AboutSection() {
               className="text-white/70 text-xs leading-tight font-sans">
             DotSlash 9.0 is a 30-hour, in-person hackathon hosted at SVNIT's beautiful campus. It's organized entirely by SVNIT students and provides a unique opportunity for developers worldwide to come together and use their skills to create useful innovations for society.
           </p>
+        </div>
+        <div className="w-full max-w-5xl mb-12 px-4 mt-12">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full">
+            <CarouselContent>
+              {[1, 2, 3, 4, 5].map((num) => (
+                <CarouselItem key={num}>
+                  <div className="relative w-full rounded-lg overflow-hidden" style={{ height: "clamp(250px, 40vh, 500px)" }}>
+                    <img
+                      src={`/past${num}.jpg`}
+                      alt={`DOTSLASH Event ${num}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = `/past${num}.JPG`;
+                      }}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="bg-[#060010] border-[#392e4e] text-white hover:bg-white hover:text-black hover:border-white left-0 md:left-4 transition-colors" />
+            <CarouselNext className="bg-[#060010] border-[#392e4e] text-white hover:bg-white hover:text-black hover:border-white right-0 md:right-4 transition-colors" />
+          </Carousel>
         </div>
       </div>
     </section>
