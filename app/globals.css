@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+* {
+  cursor: none !important;
+}
+
+/* Pixelated cursor rendering */
+[style*="imageRendering"] {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 @font-face {
   font-family: "Upheav";
   src: url("/upheav.ttf") format("truetype");
