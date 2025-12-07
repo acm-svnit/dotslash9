@@ -13,9 +13,9 @@ export default function HomePage() {
     <main style={{ position: "relative", width: "100%", overflowX: "hidden" }}>
       <Hero />
       <AboutSection />
+      <ThemesSection />
       <TimelineSection />
       <SponsorSection />
-      <ThemesSection />
       <FAQSection />
       <ContactSection />
       <video
