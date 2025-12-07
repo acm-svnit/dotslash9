@@ -39,7 +39,11 @@ type Enemy = {
   top: number;
 };
 
-export const Game: React.FC = () => {
+type GameProps = {
+  onQuit?: () => void;
+};
+
+export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const spriteScale = useSpriteScale();
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
@@ -61,6 +65,43 @@ export const Game: React.FC = () => {
 
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile/tablet
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Function to handle shooting
+  const handleShoot = () => {
+    if (gameOver || isPaused) return;
+    const now = performance.now();
+    if (now - lastShotTimeRef.current < BULLET_COOLDOWN_MS) return;
+    lastShotTimeRef.current = now;
+
+    const shipX = shipRef.current.x;
+    const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+    const shipScaledHeight = SHIP_FRAME_HEIGHT * spriteScale;
+    const bulletScaledSize = BULLET_SIZE * spriteScale;
+
+    const id = bulletIdRef.current++;
+    const bulletX = shipX + shipScaledWidth / 2 - bulletScaledSize / 2;
+    const bulletBottom =
+      SHIP_BOTTOM_OFFSET + shipScaledHeight - bulletScaledSize / 2;
+
+    const newBullets = [
+      ...bulletsRef.current,
+      { id, x: bulletX, bottom: bulletBottom },
+    ];
+    bulletsRef.current = newBullets;
+    setBullets(newBullets);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -93,7 +134,12 @@ export const Game: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameOver) return;
+      if (gameOver || isPaused) return;
+      
+      if (e.key === "p" || e.key === "P") {
+        setIsPaused(true);
+        return;
+      }
 
       if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") {
         keysRef.current.left = true;
@@ -107,26 +153,7 @@ export const Game: React.FC = () => {
 
       if (e.code === "Space" || e.key === " ") {
         e.preventDefault();
-        const now = performance.now();
-        if (now - lastShotTimeRef.current < BULLET_COOLDOWN_MS) return;
-        lastShotTimeRef.current = now;
-
-        const shipX = shipRef.current.x;
-        const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
-        const shipScaledHeight = SHIP_FRAME_HEIGHT * spriteScale;
-        const bulletScaledSize = BULLET_SIZE * spriteScale;
-
-        const id = bulletIdRef.current++;
-        const bulletX = shipX + shipScaledWidth / 2 - bulletScaledSize / 2;
-        const bulletBottom =
-          SHIP_BOTTOM_OFFSET + shipScaledHeight - bulletScaledSize / 2;
-
-        const newBullets = [
-          ...bulletsRef.current,
-          { id, x: bulletX, bottom: bulletBottom },
-        ];
-        bulletsRef.current = newBullets;
-        setBullets(newBullets);
+        handleShoot();
       }
     };
 
@@ -147,10 +174,11 @@ export const Game: React.FC = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gameOver]);
+  }, [gameOver, isPaused, onQuit]);
 
   useEffect(() => {
-    if (!viewportSize.width || !viewportSize.height || gameOver) return;
+    if (!viewportSize.width || !viewportSize.height || gameOver || isPaused)
+      return;
 
     let animationFrameId: number;
     let lastTime = performance.now();
@@ -304,7 +332,7 @@ export const Game: React.FC = () => {
 
     animationFrameId = window.requestAnimationFrame(loop);
     return () => window.cancelAnimationFrame(animationFrameId);
-  }, [viewportSize, gameOver, spriteScale]);
+  }, [viewportSize, gameOver, spriteScale, isPaused]);
 
   return (
     <div
@@ -327,20 +355,277 @@ export const Game: React.FC = () => {
         <EnemySprite key={e.id} x={e.x} top={e.top} />
       ))}
 
-      {/* Score */}
+      {/* Touch Controls - Bottom Left (Tablet and smaller screens) */}
+      {isMobile && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            left: "20px",
+            display: "flex",
+            gap: "15px",
+            zIndex: 1000,
+          }}>
+          {/* Left Arrow */}
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              if (!gameOver && !isPaused) {
+                keysRef.current.left = true;
+              }
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              keysRef.current.left = false;
+            }}
+            onMouseDown={() => {
+              if (!gameOver && !isPaused) {
+                keysRef.current.left = true;
+              }
+            }}
+            onMouseUp={() => {
+              keysRef.current.left = false;
+            }}
+            onMouseLeave={() => {
+              keysRef.current.left = false;
+            }}
+            style={{
+              width: "50px",
+              height: "50px",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              border: "2px solid #fff",
+              color: "#fff",
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "20px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              imageRendering: "pixelated",
+              userSelect: "none",
+              touchAction: "manipulation",
+            }}>
+            ←
+          </button>
+
+          {/* Right Arrow */}
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              if (!gameOver && !isPaused) {
+                keysRef.current.right = true;
+              }
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              keysRef.current.right = false;
+            }}
+            onMouseDown={() => {
+              if (!gameOver && !isPaused) {
+                keysRef.current.right = true;
+              }
+            }}
+            onMouseUp={() => {
+              keysRef.current.right = false;
+            }}
+            onMouseLeave={() => {
+              keysRef.current.right = false;
+            }}
+            style={{
+              width: "50px",
+              height: "50px",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              border: "2px solid #fff",
+              color: "#fff",
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "20px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              imageRendering: "pixelated",
+              userSelect: "none",
+              touchAction: "manipulation",
+            }}>
+            →
+          </button>
+
+          {/* Shoot Button */}
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleShoot();
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleShoot();
+            }}
+            style={{
+              width: "50px",
+              height: "50px",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              border: "2px solid #fff",
+              color: "#fff",
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "16px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              imageRendering: "pixelated",
+              userSelect: "none",
+              touchAction: "manipulation",
+            }}>
+            ⚡
+          </button>
+        </div>
+      )}
+
+      {/* Score and Pause Button */}
       <div
         style={{
           position: "absolute",
-          top: "20px",
+          bottom: "20px",
           right: "20px",
-          color: "#fff",
-          fontSize: "12px",
-          fontFamily: "Upheav, sans-serif",
-          textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "10px",
           zIndex: 1000,
         }}>
-        Score: {score}
+        <div
+          style={{
+            color: "#fff",
+            fontSize: "12px",
+            fontFamily: "Upheav, sans-serif",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+          }}>
+          Score: {score}
+        </div>
+        <button
+          onClick={() => setIsPaused(true)}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            border: "2px solid #fff",
+            color: "#fff",
+            fontFamily: "Upheav, sans-serif",
+            fontSize: "12px",
+            cursor: "pointer",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+            transition: "background-color 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+          }}>
+          Pause
+        </button>
       </div>
+
+      {/* Pause Dialog */}
+      {isPaused && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2000,
+          }}>
+          <div
+            style={{
+              backgroundColor: "#000",
+              border: "2px solid #fff",
+              padding: "40px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "30px",
+              minWidth: "300px",
+            }}>
+            <h2
+              style={{
+                color: "#fff",
+                fontFamily: "Upheav, sans-serif",
+                fontSize: "24px",
+                margin: 0,
+              }}>
+              Paused
+            </h2>
+            <div
+              style={{
+                color: "#fff",
+                fontFamily: "Upheav, sans-serif",
+                fontSize: "18px",
+              }}>
+              Score: {score}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+              }}>
+              <button
+                onClick={() => setIsPaused(false)}
+                style={{
+                  padding: "12px 24px",
+                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                  border: "2px solid #fff",
+                  color: "#fff",
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  transition: "background-color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0.3)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0.2)";
+                }}>
+                Resume
+              </button>
+              <button
+                onClick={() => {
+                  if (onQuit) {
+                    onQuit();
+                  }
+                }}
+                style={{
+                  padding: "12px 24px",
+                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                  border: "2px solid #fff",
+                  color: "#fff",
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  transition: "background-color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0.3)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255, 255, 255, 0.2)";
+                }}>
+                Quit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
