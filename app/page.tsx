@@ -12,6 +12,22 @@ export default function HomePage() {
       <AboutSection />
       <FAQSection />
       <ContactSection />
+      <video
+        src="/dotslash.webm"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          width: "85%",
+          height: "auto",
+          margin: "0 auto",
+          minHeight: "200px",
+          objectFit: "cover",
+          display: "block",
+          opacity: 0.5,
+        }}
+      />
     </main>
   );
 }
