@@ -158,7 +158,7 @@ export default function AboutSection() {
               textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
               marginBottom: "clamp(8px, 1.5vh, 15px)",
             }}>
-            Hackathon
+            Code the Cosmos
           </h4>
           <p
             style={{
@@ -204,6 +204,7 @@ export default function AboutSection() {
           <img
             src="/star2.gif"
             alt="Star"
+            className="prizes-star"
             style={{
               position: "absolute",
               top: "50%",
