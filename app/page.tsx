@@ -1,7 +1,13 @@
+import { Game } from "@/components/game";
+
 export default function HomePage() {
   return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#000",
+      }}>
+      <Game />
+    </main>
   );
 }
