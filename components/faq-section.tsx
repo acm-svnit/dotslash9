@@ -159,6 +159,18 @@ export default function FAQSection() {
           </Accordion>
         </div>
       </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          height: "200px",
+          background: "linear-gradient(to top, #000, transparent)",
+          pointerEvents: "none",
+          zIndex: 5,
+        }}
+      />
     </section>
   );
 }

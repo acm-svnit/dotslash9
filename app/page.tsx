@@ -3,6 +3,7 @@
 import Hero from "@/components/hero";
 import AboutSection from "@/components/about-section";
 import FAQSection from "@/components/faq-section";
+import ContactSection from "@/components/contact-section";
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <Hero />
       <AboutSection />
       <FAQSection />
+      <ContactSection />
     </main>
   );
 }
