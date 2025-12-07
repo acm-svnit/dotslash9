@@ -18,6 +18,23 @@ export default function ContactSection() {
         position: "relative",
         boxSizing: "border-box",
       }}>
+      <img
+        src="/gas2.gif"
+        alt="Gas"
+        style={{
+          position: "absolute",
+          bottom: "-20%",
+          left: "50%",
+          transform: "translate(-50%, 0%)",
+          width: "clamp(700px, 90vw, 1600px)",
+          height: "clamp(700px, 90vw, 1600px)",
+          objectFit: "contain",
+          imageRendering: "pixelated",
+          pointerEvents: "none",
+          zIndex: 1,
+          opacity: 0.8,
+        }}
+      />
       <div
         style={{
           width: "100%",

@@ -11,6 +11,7 @@ type HeroProps = {
 
 export default function Hero({ bgReady: externalBgReady }: HeroProps) {
   const [showGame, setShowGame] = useState(false);
+  const [isGamePaused, setIsGamePaused] = useState(false);
   const [heroBgReady, setHeroBgReady] = useState(false);
   const [lettersReady, setLettersReady] = useState(false);
   const [bgReady, setBgReady] = useState(false);
@@ -120,10 +121,12 @@ export default function Hero({ bgReady: externalBgReady }: HeroProps) {
           fontSize: "clamp(48px, 15vw, 200px)",
           color: "#fff",
           textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)",
-          zIndex: 10,
+          zIndex: isGamePaused ? 0 : 10,
           pointerEvents: "none",
           whiteSpace: "nowrap",
           display: "flex",
+          opacity: isGamePaused ? 0 : 1,
+          transition: "opacity 0.3s ease",
         }}>
         {letters.map((letter, index) => (
           <span
@@ -203,7 +206,7 @@ export default function Hero({ bgReady: externalBgReady }: HeroProps) {
         <div
           ref={gameRef}
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, zIndex: 2 }}>
-          <Game onQuit={() => setShowGame(false)} />
+          <Game onQuit={() => setShowGame(false)} onPauseChange={setIsGamePaused} />
         </div>
       )}
       <div
