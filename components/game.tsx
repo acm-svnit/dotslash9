@@ -9,6 +9,7 @@ import {
 import { BulletSprite, BULLET_SIZE } from "@/components/bullet-sprite";
 import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "@/components/enemy-sprite";
 import { useSpriteScale } from "@/components/use-sprite-scale";
+import { useAudio } from "@/contexts/audio-context";
 
 const SHIP_BOTTOM_OFFSET = 80;
 
@@ -45,6 +46,7 @@ type GameProps = {
 
 export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const spriteScale = useSpriteScale();
+  const { isMuted, toggleMute } = useAudio();
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
 
   const [ship, setShip] = useState<ShipState>({ x: 0, v: 0 });
@@ -561,10 +563,66 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
             <div
               style={{
                 display: "flex",
+                flexDirection: "column",
                 gap: "20px",
+                width: "100%",
               }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "20px",
+                }}>
+                <button
+                  onClick={() => setIsPaused(false)}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    border: "2px solid #fff",
+                    color: "#fff",
+                    fontFamily: "Upheav, sans-serif",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.2)";
+                  }}>
+                  Resume
+                </button>
+                <button
+                  onClick={() => {
+                    if (onQuit) {
+                      onQuit();
+                    }
+                  }}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    border: "2px solid #fff",
+                    color: "#fff",
+                    fontFamily: "Upheav, sans-serif",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.2)";
+                  }}>
+                  Quit
+                </button>
+              </div>
               <button
-                onClick={() => setIsPaused(false)}
+                onClick={toggleMute}
                 style={{
                   padding: "12px 24px",
                   backgroundColor: "rgba(255, 255, 255, 0.2)",
@@ -583,33 +641,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
                   e.currentTarget.style.backgroundColor =
                     "rgba(255, 255, 255, 0.2)";
                 }}>
-                Resume
-              </button>
-              <button
-                onClick={() => {
-                  if (onQuit) {
-                    onQuit();
-                  }
-                }}
-                style={{
-                  padding: "12px 24px",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  border: "2px solid #fff",
-                  color: "#fff",
-                  fontFamily: "Upheav, sans-serif",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  transition: "background-color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0.2)";
-                }}>
-                Quit
+                {isMuted ? "Unmute" : "Mute"}
               </button>
             </div>
           </div>

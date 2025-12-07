@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useAudio } from "@/contexts/audio-context";
 
 const ASSETS = [
   "/bg1.png",
@@ -21,7 +22,7 @@ type PreloaderProps = {
 export default function Preloader({ children }: PreloaderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const { audioRef } = useAudio();
   const hasStartedAudio = useRef(false);
 
   useEffect(() => {

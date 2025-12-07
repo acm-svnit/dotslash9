@@ -5,8 +5,24 @@ import React, { useEffect, useState } from "react";
 export default function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
+
     const updateCursor = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
       setIsVisible(true);
@@ -23,9 +39,9 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", updateCursor);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [isMobile]);
 
-  if (!isVisible) return null;
+  if (isMobile || !isVisible) return null;
 
   return (
     <div
