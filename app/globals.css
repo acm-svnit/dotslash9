@@ -280,3 +280,7 @@ main {
     letter-spacing: var(--tracking-normal);
   }
 }
+
+.timeline-clickable-card {
+  cursor: pointer !important;
+}

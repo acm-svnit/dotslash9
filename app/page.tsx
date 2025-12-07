@@ -4,6 +4,8 @@ import Hero from "@/components/hero";
 import AboutSection from "@/components/about-section";
 import FAQSection from "@/components/faq-section";
 import ContactSection from "@/components/contact-section";
+import TimelineSection from "@/components/timeline-section";
+import SponsorSection from "@/components/sponsor-section";
 import ThemesSection from "@/components/themes-section";
 
 export default function HomePage() {
@@ -11,6 +13,8 @@ export default function HomePage() {
     <main style={{ position: "relative", width: "100%", overflowX: "hidden" }}>
       <Hero />
       <AboutSection />
+      <TimelineSection />
+      <SponsorSection />
       <ThemesSection />
       <FAQSection />
       <ContactSection />
