@@ -200,6 +200,187 @@ export default function AboutSection() {
             <CarouselNext className="bg-[#060010] border-[#392e4e] text-white hover:bg-white hover:text-black hover:border-white right-0 md:right-4 transition-colors" />
           </Carousel>
         </div>
+        <div className="w-full max-w-5xl mt-12 mb-12 relative">
+          <img
+            src="/star2.gif"
+            alt="Star"
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "clamp(800px, 120vw, 2000px)",
+              height: "clamp(800px, 120vw, 2000px)",
+              objectFit: "contain",
+              imageRendering: "pixelated",
+              pointerEvents: "none",
+              zIndex: 0,
+              opacity: 0.6,
+            }}
+          />
+          <h3
+            style={{
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "clamp(28px, 6vw, 60px)",
+              color: "#fff",
+              textAlign: "center",
+              textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)",
+              marginBottom: "clamp(30px, 5vh, 60px)",
+              position: "relative",
+              zIndex: 10,
+            }}>
+            Prizes
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative z-10">
+            <div
+              style={{
+                backgroundColor: "#060010",
+                border: "1px solid #392e4e",
+                borderRadius: "12px",
+                padding: "clamp(20px, 3vw, 30px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
+                e.currentTarget.style.boxShadow = "0 0 30px rgba(75,85,255,0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#392e4e";
+                e.currentTarget.style.boxShadow = "none";
+              }}>
+              <img
+                src="/1.png"
+                alt="1st Place"
+                style={{
+                  width: "clamp(80px, 15vw, 150px)",
+                  height: "clamp(80px, 15vw, 150px)",
+                  objectFit: "contain",
+                  marginBottom: "16px",
+                }}
+              />
+              <h4
+                style={{
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: "clamp(20px, 3vw, 32px)",
+                  color: "#fff",
+                  marginBottom: "8px",
+                }}>
+                1st Place
+              </h4>
+              <p
+                style={{
+                  color: "rgba(255, 255, 255, 0.8)",
+                  fontSize: "clamp(16px, 2.5vw, 24px)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "600",
+                }}>
+                ₹50,000
+              </p>
+            </div>
+            <div
+              style={{
+                backgroundColor: "#060010",
+                border: "1px solid #392e4e",
+                borderRadius: "12px",
+                padding: "clamp(20px, 3vw, 30px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
+                e.currentTarget.style.boxShadow = "0 0 30px rgba(75,85,255,0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#392e4e";
+                e.currentTarget.style.boxShadow = "none";
+              }}>
+              <img
+                src="/2.png"
+                alt="2nd Place"
+                style={{
+                  width: "clamp(80px, 15vw, 150px)",
+                  height: "clamp(80px, 15vw, 150px)",
+                  objectFit: "contain",
+                  marginBottom: "16px",
+                }}
+              />
+              <h4
+                style={{
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: "clamp(20px, 3vw, 32px)",
+                  color: "#fff",
+                  marginBottom: "8px",
+                }}>
+                2nd Place
+              </h4>
+              <p
+                style={{
+                  color: "rgba(255, 255, 255, 0.8)",
+                  fontSize: "clamp(16px, 2.5vw, 24px)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "600",
+                }}>
+                ₹30,000
+              </p>
+            </div>
+            <div
+              style={{
+                backgroundColor: "#060010",
+                border: "1px solid #392e4e",
+                borderRadius: "12px",
+                padding: "clamp(20px, 3vw, 30px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
+                e.currentTarget.style.boxShadow = "0 0 30px rgba(75,85,255,0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#392e4e";
+                e.currentTarget.style.boxShadow = "none";
+              }}>
+              <img
+                src="/3.png"
+                alt="3rd Place"
+                style={{
+                  width: "clamp(80px, 15vw, 150px)",
+                  height: "clamp(80px, 15vw, 150px)",
+                  objectFit: "contain",
+                  marginBottom: "16px",
+                }}
+              />
+              <h4
+                style={{
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: "clamp(20px, 3vw, 32px)",
+                  color: "#fff",
+                  marginBottom: "8px",
+                }}>
+                3rd Place
+              </h4>
+              <p
+                style={{
+                  color: "rgba(255, 255, 255, 0.8)",
+                  fontSize: "clamp(16px, 2.5vw, 24px)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "600",
+                }}>
+                ₹20,000
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
