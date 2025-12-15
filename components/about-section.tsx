@@ -176,6 +176,18 @@ export default function AboutSection() {
           </h4>
           <p
             style={{
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "clamp(16px, 4vw, 26px)",
+              color: "rgba(75,85,255,0.9)",
+              textShadow: "2px 2px 6px rgba(0,0,0,0.6)",
+              marginBottom: "clamp(12px, 2vh, 24px)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            21 - 22 March 2026
+          </p>
+          <p
+            style={{
               color: "rgba(255, 255, 255, 0.7)",
               fontSize: "clamp(14px, 2vw, 18px)",
               lineHeight: "1.2",
