@@ -86,6 +86,38 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  const restartGame = () => {
+    const { width } = viewportSize;
+    const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+    const startX = width
+      ? Math.max(0, width / 2 - shipScaledWidth / 2)
+      : shipRef.current.x;
+
+    const initialShip: ShipState = { x: startX, v: 0 };
+
+    setGameOver(false);
+    setIsPaused(false);
+    setScore(0);
+
+    setShip(initialShip);
+    shipRef.current = initialShip;
+
+    setBullets([]);
+    setEnemies([]);
+    bulletsRef.current = [];
+    enemiesRef.current = [];
+
+    bulletsRef.current = [];
+    enemiesRef.current = [];
+
+    bulletIdRef.current = 0;
+    enemyIdRef.current = 0;
+    lastShotTimeRef.current = 0;
+    enemySpawnAccumulatorRef.current = 0;
+
+    keysRef.current = { left: false, right: false };
+  };
+
   const handleShoot = () => {
     if (gameOver || isPaused) return;
     const now = performance.now();
@@ -537,25 +569,31 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            padding: isMobile ? "16px" : 0,
+            boxSizing: "border-box",
             zIndex: 99999,
           }}>
           <div
             style={{
               backgroundColor: "#000",
               border: "2px solid #fff",
-              padding: "40px",
+              padding: isMobile ? "24px 16px" : "40px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "30px",
-              minWidth: "300px",
+              gap: isMobile ? "20px" : "30px",
+              width: "100%",
+              maxWidth: "420px",
+              boxSizing: "border-box",
+              borderRadius: "8px",
             }}>
             <h2
               style={{
                 color: "#fff",
                 fontFamily: "Upheav, sans-serif",
-                fontSize: "24px",
+                fontSize: isMobile ? "20px" : "24px",
                 margin: 0,
+                textAlign: "center",
               }}>
               Paused
             </h2>
@@ -563,7 +601,8 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
               style={{
                 color: "#fff",
                 fontFamily: "Upheav, sans-serif",
-                fontSize: "18px",
+                fontSize: isMobile ? "16px" : "18px",
+                textAlign: "center",
               }}>
               Score: {score}
             </div>
@@ -577,7 +616,9 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
               <div
                 style={{
                   display: "flex",
-                  gap: "20px",
+                  flexDirection: isMobile ? "column" : "row",
+                  gap: isMobile ? "12px" : "20px",
+                  width: "100%",
                 }}>
                 <button
                   onClick={() => setIsPaused(false)}
@@ -591,6 +632,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                     cursor: "pointer",
                     transition: "background-color 0.2s",
                     flex: 1,
+                    width: "100%",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
@@ -601,6 +643,30 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                       "rgba(255, 255, 255, 0.2)";
                   }}>
                   Resume
+                </button>
+                <button
+                  onClick={restartGame}
+                  style={{
+                    padding: "12px 24px",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    border: "2px solid #fff",
+                    color: "#fff",
+                    fontFamily: "Upheav, sans-serif",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                    flex: 1,
+                    width: "100%",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255, 255, 255, 0.2)";
+                  }}>
+                  Restart
                 </button>
                 <button
                   onClick={() => {
@@ -618,6 +684,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                     cursor: "pointer",
                     transition: "background-color 0.2s",
                     flex: 1,
+                    width: "100%",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =

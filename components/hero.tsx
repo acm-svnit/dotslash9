@@ -205,7 +205,7 @@ export default function Hero({ bgReady: externalBgReady }: HeroProps) {
       {showGame && heroBgReady && (
         <div
           ref={gameRef}
-          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, zIndex: 2 }}>
+          style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, zIndex: 4 }}>
           <Game onQuit={() => setShowGame(false)} onPauseChange={setIsGamePaused} />
         </div>
       )}
