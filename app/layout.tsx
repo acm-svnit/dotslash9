@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 48 hours of creation, collaboration, and impact.",
   icons: {
     icon: "/dotslash.png",
+    shortcut: "/dotslash.png",
+    apple: "/dotslash.png",
   },
   keywords: [
     "Dotslash",
@@ -84,9 +86,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.hackatdotslash.co.in";
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Dotslash 9.0",
+    url: siteUrl,
+    logo: `${siteUrl}/dotslash.png`,
+    description:
+      "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 48 hours of creation, collaboration, and impact.",
+  };
+
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
         <AudioProvider>
           <Preloader>
             <CustomCursor />
