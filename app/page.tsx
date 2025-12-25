@@ -58,16 +58,19 @@ export default function HomePage() {
             opacity: 0.5,
           }}
         />
-        <img
-          src="/sentry.png"
-          alt="Sentry"
+        <video
+          src="/sentry3.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
           style={{
             position: "absolute",
-            top: "12%",
+            top: "-10%",
             left: "50%",
             transform: "translateX(-50%)",
-            width: "90%",
-            height: "90%",
+            width: "110%",
+            height: "110%",
             objectFit: "contain",
             pointerEvents: "none",
           }}
