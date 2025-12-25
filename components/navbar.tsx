@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export default function Navbar() {
+interface NavbarProps {
+  opacity?: number;
+}
+
+export default function Navbar({ opacity = 1 }: NavbarProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
   const pathname = usePathname();
@@ -131,6 +135,9 @@ export default function Navbar() {
           zIndex: 1000,
           width: "auto",
           maxWidth: "90%",
+          opacity: opacity,
+          transition: "opacity 0.3s ease-in-out",
+          pointerEvents: opacity === 0 ? "none" : "auto",
         }}
       >
         <div
