@@ -73,7 +73,7 @@ export default function ContactSection() {
             style={{
               backgroundColor: "#060010",
               border: "1px solid #392e4e",
-              borderRadius: "12px",
+              borderRadius: "0",
               padding: "clamp(20px, 3vw, 30px)",
               display: "flex",
               flexDirection: "column",
@@ -108,7 +108,7 @@ export default function ContactSection() {
             style={{
               backgroundColor: "#060010",
               border: "1px solid #392e4e",
-              borderRadius: "12px",
+              borderRadius: "0",
               padding: "clamp(20px, 3vw, 30px)",
               display: "flex",
               flexDirection: "column",
@@ -188,7 +188,7 @@ export default function ContactSection() {
             width: "100%",
             maxWidth: "1000px",
             height: "clamp(300px, 50vh, 500px)",
-            borderRadius: "12px",
+            borderRadius: "0",
             overflow: "hidden",
             border: "1px solid #392e4e",
           }}>

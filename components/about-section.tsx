@@ -45,8 +45,7 @@ export default function AboutSection() {
         overflow: "hidden",
         position: "relative",
         boxSizing: "border-box",
-      }}
-    >
+      }}>
       <div
         style={{
           width: "100%",
@@ -59,8 +58,7 @@ export default function AboutSection() {
           justifyContent: "center",
           boxSizing: "border-box",
           position: "relative",
-        }}
-      >
+        }}>
         <h2
           style={{
             fontFamily: "Upheav, sans-serif",
@@ -69,8 +67,7 @@ export default function AboutSection() {
             textAlign: "center",
             textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)",
             marginBottom: "clamp(40px, 6vh, 80px)",
-          }}
-        >
+          }}>
           About DOTSLASH
         </h2>
         <div className="relative w-full max-w-4xl mb-12">
@@ -114,8 +111,7 @@ export default function AboutSection() {
             {cardData.map((card, index) => (
               <Card
                 key={index}
-                className="bg-[#060010] border-[#392e4e] text-white hover:border-[rgba(75,85,255,0.8)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(75,85,255,0.5)] overflow-hidden flex flex-col relative group p-4"
-              >
+                className="bg-[#060010] border-[#392e4e] text-white hover:border-[rgba(75,85,255,0.8)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(75,85,255,0.5)] overflow-hidden flex flex-col relative group p-4">
                 <div className="absolute inset-0 bg-linear-to-br from-[rgba(75,85,255,0.1)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
                 <div
                   className="absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"
@@ -141,8 +137,7 @@ export default function AboutSection() {
                   <CardContent className="p-0 relative z-20">
                     <p
                       className="text-white/70 text-xs leading-tight"
-                      style={{ fontFamily: "var(--font-sans)" }}
-                    >
+                      style={{ fontFamily: "var(--font-sans)" }}>
                       {card.paragraph}
                     </p>
                   </CardContent>
@@ -159,8 +154,7 @@ export default function AboutSection() {
               color: "#fff",
               textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)",
               marginBottom: "clamp(1px, 0.2vh, 3px)",
-            }}
-          >
+            }}>
             DOTSLASH 9.0
           </h3>
           <h4
@@ -170,8 +164,7 @@ export default function AboutSection() {
               color: "rgba(255, 255, 255, 1)",
               textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
               marginBottom: "clamp(8px, 1.5vh, 15px)",
-            }}
-          >
+            }}>
             GlitchVerse - Code the Cosmos
           </h4>
           <p
@@ -182,8 +175,7 @@ export default function AboutSection() {
               textShadow: "2px 2px 6px rgba(0,0,0,0.6)",
               marginBottom: "clamp(12px, 2vh, 24px)",
               letterSpacing: "0.04em",
-            }}
-          >
+            }}>
             21 - 22 March 2026
           </p>
           <p
@@ -194,8 +186,7 @@ export default function AboutSection() {
               maxWidth: "800px",
               margin: "0 auto",
             }}
-            className="text-white/70 text-xs leading-tight font-sans"
-          >
+            className="text-white/70 text-xs leading-tight font-sans">
             DotSlash 9.0 is a 30-hour, in-person hackathon hosted at SVNIT's
             beautiful campus. It's organized entirely by SVNIT students and
             provides a unique opportunity for developers worldwide to come
@@ -209,15 +200,13 @@ export default function AboutSection() {
               align: "start",
               loop: true,
             }}
-            className="w-full"
-          >
+            className="w-full">
             <CarouselContent>
               {[1, 2, 3, 4, 5].map((num) => (
                 <CarouselItem key={num}>
                   <div
-                    className="relative w-full rounded-lg overflow-hidden"
-                    style={{ height: "clamp(250px, 40vh, 500px)" }}
-                  >
+                    className="relative w-full overflow-hidden"
+                    style={{ height: "clamp(250px, 40vh, 500px)" }}>
                     <img
                       src={`/past${num}.jpg`}
                       alt={`DOTSLASH Event ${num}`}
@@ -264,8 +253,7 @@ export default function AboutSection() {
               marginBottom: "clamp(30px, 5vh, 60px)",
               position: "relative",
               zIndex: 10,
-            }}
-          >
+            }}>
             Prizes
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full relative z-10">
@@ -273,7 +261,7 @@ export default function AboutSection() {
               style={{
                 backgroundColor: "#060010",
                 border: "1px solid #392e4e",
-                borderRadius: "12px",
+                borderRadius: "0",
                 padding: "clamp(20px, 3vw, 30px)",
                 display: "flex",
                 flexDirection: "column",
@@ -289,8 +277,7 @@ export default function AboutSection() {
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "#392e4e";
                 e.currentTarget.style.boxShadow = "none";
-              }}
-            >
+              }}>
               <img
                 src="/1.png"
                 alt="1st Place"
@@ -307,8 +294,7 @@ export default function AboutSection() {
                   fontSize: "clamp(20px, 3vw, 32px)",
                   color: "#fff",
                   marginBottom: "8px",
-                }}
-              >
+                }}>
                 1st Place
               </h4>
               <p
@@ -317,8 +303,7 @@ export default function AboutSection() {
                   fontSize: "clamp(16px, 2.5vw, 24px)",
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
-                }}
-              >
+                }}>
                 ₹80,000
               </p>
             </div>
@@ -326,7 +311,7 @@ export default function AboutSection() {
               style={{
                 backgroundColor: "#060010",
                 border: "1px solid #392e4e",
-                borderRadius: "12px",
+                borderRadius: "0",
                 padding: "clamp(20px, 3vw, 30px)",
                 display: "flex",
                 flexDirection: "column",
@@ -342,8 +327,7 @@ export default function AboutSection() {
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "#392e4e";
                 e.currentTarget.style.boxShadow = "none";
-              }}
-            >
+              }}>
               <img
                 src="/2.png"
                 alt="2nd Place"
@@ -360,8 +344,7 @@ export default function AboutSection() {
                   fontSize: "clamp(20px, 3vw, 32px)",
                   color: "#fff",
                   marginBottom: "8px",
-                }}
-              >
+                }}>
                 2nd Place
               </h4>
               <p
@@ -370,8 +353,7 @@ export default function AboutSection() {
                   fontSize: "clamp(16px, 2.5vw, 24px)",
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
-                }}
-              >
+                }}>
                 ₹50,000
               </p>
             </div>
@@ -379,7 +361,7 @@ export default function AboutSection() {
               style={{
                 backgroundColor: "#060010",
                 border: "1px solid #392e4e",
-                borderRadius: "12px",
+                borderRadius: "0",
                 padding: "clamp(20px, 3vw, 30px)",
                 display: "flex",
                 flexDirection: "column",
@@ -395,8 +377,7 @@ export default function AboutSection() {
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "#392e4e";
                 e.currentTarget.style.boxShadow = "none";
-              }}
-            >
+              }}>
               <img
                 src="/3.png"
                 alt="3rd Place"
@@ -413,8 +394,7 @@ export default function AboutSection() {
                   fontSize: "clamp(20px, 3vw, 32px)",
                   color: "#fff",
                   marginBottom: "8px",
-                }}
-              >
+                }}>
                 3rd Place
               </h4>
               <p
@@ -423,8 +403,7 @@ export default function AboutSection() {
                   fontSize: "clamp(16px, 2.5vw, 24px)",
                   fontFamily: "var(--font-sans)",
                   fontWeight: "600",
-                }}
-              >
+                }}>
                 ₹30,000
               </p>
             </div>
