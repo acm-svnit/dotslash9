@@ -168,7 +168,7 @@ export default function Hero({ bgReady: externalBgReady }: HeroProps) {
         />
         <ShootingStars />
         <img
-          src="/galaxy1.gif"
+          src="/galaxy3.gif"
           alt="Galaxy"
           style={{
             position: "absolute",

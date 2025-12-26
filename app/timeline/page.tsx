@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import TimelineSection from "@/components/timeline-section";
 import ContactSection from "@/components/contact-section";
+import VideosSection from "@/components/videos-section";
 import Navbar from "@/components/navbar";
 
 export default function TimelinePage() {
@@ -29,45 +30,7 @@ export default function TimelinePage() {
       <Navbar opacity={isAtBottom ? 0 : 1} />
       <TimelineSection />
       <ContactSection />
-      <div
-        style={{
-          position: "relative",
-          width: "85%",
-          margin: "0 auto",
-          minHeight: "200px",
-        }}>
-        <video
-          src="/dotslash.webm"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            width: "100%",
-            height: "auto",
-            objectFit: "cover",
-            display: "block",
-            opacity: 0.5,
-          }}
-        />
-        <video
-          src="/sentry3.webm"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: "absolute",
-            top: "-10%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "110%",
-            height: "110%",
-            objectFit: "contain",
-            pointerEvents: "none",
-          }}
-        />
-      </div>
+      <VideosSection />
     </main>
   );
 }

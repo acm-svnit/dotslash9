@@ -150,7 +150,7 @@ export default function SponsorSection() {
                 style={{
                   backgroundColor: "#fff",
                   border: "1px solid #392e4e",
-                  borderRadius: "12px",
+                  borderRadius: "0",
                   padding: "clamp(20px, 3vw, 30px)",
                   display: "flex",
                   alignItems: "center",
