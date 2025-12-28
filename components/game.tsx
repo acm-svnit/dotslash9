@@ -8,7 +8,12 @@ import {
   SHIP_FRAME_HEIGHT,
 } from "@/components/ship-sprite";
 import { BulletSprite, BULLET_SIZE } from "@/components/bullet-sprite";
-import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "@/components/enemy-sprite";
+import {
+  EnemySprite,
+  ENEMY_WIDTH,
+  ENEMY_HEIGHT,
+} from "@/components/enemy-sprite";
+import { ExplosionSprite, EXPLOSION_SIZE } from "@/components/explosion-sprite";
 import { useSpriteScale } from "@/components/use-sprite-scale";
 import { useAudio } from "@/contexts/audio-context";
 
@@ -39,6 +44,15 @@ type Enemy = {
   id: number;
   x: number;
   top: number;
+  isHit?: boolean;
+  hitTime?: number;
+};
+
+type Explosion = {
+  id: number;
+  x: number;
+  top: number;
+  startTime: number;
 };
 
 type GameProps = {
@@ -56,14 +70,17 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
   const [bullets, setBullets] = useState<Bullet[]>([]);
   const [enemies, setEnemies] = useState<Enemy[]>([]);
+  const [explosions, setExplosions] = useState<Explosion[]>([]);
 
   const bulletsRef = useRef<Bullet[]>([]);
   const enemiesRef = useRef<Enemy[]>([]);
+  const explosionsRef = useRef<Explosion[]>([]);
 
   const keysRef = useRef({ left: false, right: false });
 
   const bulletIdRef = useRef(0);
   const enemyIdRef = useRef(0);
+  const explosionIdRef = useRef(0);
   const lastShotTimeRef = useRef(0);
   const enemySpawnAccumulatorRef = useRef(0);
 
@@ -109,9 +126,11 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
     bulletsRef.current = [];
     enemiesRef.current = [];
+    explosionsRef.current = [];
 
     bulletIdRef.current = 0;
     enemyIdRef.current = 0;
+    explosionIdRef.current = 0;
     lastShotTimeRef.current = 0;
     enemySpawnAccumulatorRef.current = 0;
 
@@ -174,7 +193,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (gameOver || isPaused) return;
-      
+
       if (e.key === "p" || e.key === "P") {
         setIsPaused(true);
         return;
@@ -295,10 +314,24 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
           }))
           .filter((b) => b.bottom <= height + bulletScaledSize);
 
-        enemies = enemies.map((e) => ({
-          ...e,
-          top: e.top + ENEMY_SPEED * deltaSeconds,
-        }));
+        const now = performance.now();
+        enemies = enemies
+          .map((e) => {
+            if (e.isHit && e.hitTime) {
+              const timeSinceHit = (now - e.hitTime) / 1000;
+              if (timeSinceHit < 0.5) {
+                return e;
+              }
+
+              return null;
+            }
+
+            return {
+              ...e,
+              top: e.top + ENEMY_SPEED * deltaSeconds,
+            };
+          })
+          .filter((e): e is Enemy => e !== null);
 
         const bulletAlive = new Array(bullets.length).fill(true);
         const enemyAlive = new Array(enemies.length).fill(true);
@@ -317,6 +350,9 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
             if (!enemyAlive[j]) continue;
 
             const e = enemies[j];
+
+            if (e.isHit) continue;
+
             const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
             const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
             const enemyLeft = e.x;
@@ -332,7 +368,36 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
             if (overlap) {
               bulletAlive[i] = false;
-              enemyAlive[j] = false;
+
+              const hitEnemy = enemies[j];
+
+              const explosionX =
+                hitEnemy.x +
+                enemyScaledWidth / 2 -
+                (EXPLOSION_SIZE * spriteScale) / 2;
+              const explosionTop =
+                hitEnemy.top +
+                enemyScaledHeight / 2 -
+                (EXPLOSION_SIZE * spriteScale) / 2;
+
+              const explosionId = explosionIdRef.current++;
+              const newExplosion: Explosion = {
+                id: explosionId,
+                x: explosionX,
+                top: explosionTop,
+                startTime: now,
+              };
+
+              explosionsRef.current = [...explosionsRef.current, newExplosion];
+              setExplosions([...explosionsRef.current]);
+
+              enemies[j] = {
+                ...hitEnemy,
+                isHit: true,
+                hitTime: now,
+              };
+              enemyAlive[j] = true;
+
               setScore((prev) => prev + 1);
               break;
             }
@@ -341,8 +406,17 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
         const newEnemies: Enemy[] = [];
         for (let j = 0; j < enemies.length; j++) {
-          if (!enemyAlive[j]) continue;
           const e = enemies[j];
+
+          if (e.isHit && e.hitTime) {
+            const timeSinceHit = (now - e.hitTime) / 1000;
+            if (timeSinceHit >= 0.5) {
+              continue;
+            }
+
+            newEnemies.push(e);
+            continue;
+          }
 
           const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
           if (e.top + enemyScaledHeight >= height) {
@@ -353,12 +427,19 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
           newEnemies.push(e);
         }
 
+        const newExplosions = explosionsRef.current.filter((exp) => {
+          const elapsed = (now - exp.startTime) / 1000;
+          return elapsed < 0.5;
+        });
+
         const newBullets = bullets.filter((_, i) => bulletAlive[i]);
 
         enemiesRef.current = newEnemies;
         bulletsRef.current = newBullets;
+        explosionsRef.current = newExplosions;
         setEnemies(newEnemies);
         setBullets(newBullets);
+        setExplosions(newExplosions);
       }
 
       if (playerDead) {
@@ -389,6 +470,10 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
       {enemies.map((e) => (
         <EnemySprite key={e.id} x={e.x} top={e.top} />
+      ))}
+
+      {explosions.map((exp) => (
+        <ExplosionSprite key={exp.id} x={exp.x} top={exp.top} />
       ))}
 
       {isMobile && (
@@ -556,72 +641,151 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
         </button>
       </div>
 
-      {isPaused && mounted && createPortal(
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: isMobile ? "16px" : 0,
-            boxSizing: "border-box",
-            zIndex: 99999,
-          }}>
+      {isPaused &&
+        mounted &&
+        createPortal(
           <div
             style={{
-              backgroundColor: "#000",
-              border: "2px solid #fff",
-              padding: isMobile ? "24px 16px" : "40px",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: isMobile ? "20px" : "30px",
-              width: "100%",
-              maxWidth: "420px",
+              justifyContent: "center",
+              padding: isMobile ? "16px" : 0,
               boxSizing: "border-box",
-              borderRadius: "8px",
+              zIndex: 99999,
             }}>
-            <h2
-              style={{
-                color: "#fff",
-                fontFamily: "Upheav, sans-serif",
-                fontSize: isMobile ? "20px" : "24px",
-                margin: 0,
-                textAlign: "center",
-              }}>
-              Paused
-            </h2>
             <div
               style={{
-                color: "#fff",
-                fontFamily: "Upheav, sans-serif",
-                fontSize: isMobile ? "16px" : "18px",
-                textAlign: "center",
-              }}>
-              Score: {score}
-            </div>
-            <div
-              style={{
+                backgroundColor: "#000",
+                border: "2px solid #fff",
+                padding: isMobile ? "24px 16px" : "40px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "20px",
+                alignItems: "center",
+                gap: isMobile ? "20px" : "30px",
                 width: "100%",
+                maxWidth: "420px",
+                boxSizing: "border-box",
+                borderRadius: "8px",
               }}>
+              <h2
+                style={{
+                  color: "#fff",
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: isMobile ? "20px" : "24px",
+                  margin: 0,
+                  textAlign: "center",
+                }}>
+                Paused
+              </h2>
+              <div
+                style={{
+                  color: "#fff",
+                  fontFamily: "Upheav, sans-serif",
+                  fontSize: isMobile ? "16px" : "18px",
+                  textAlign: "center",
+                }}>
+                Score: {score}
+              </div>
               <div
                 style={{
                   display: "flex",
-                  flexDirection: isMobile ? "column" : "row",
-                  gap: isMobile ? "12px" : "20px",
+                  flexDirection: "column",
+                  gap: "20px",
                   width: "100%",
                 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: isMobile ? "column" : "row",
+                    gap: isMobile ? "12px" : "20px",
+                    width: "100%",
+                  }}>
+                  <button
+                    onClick={() => setIsPaused(false)}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                      fontFamily: "Upheav, sans-serif",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      transition: "background-color 0.2s",
+                      flex: 1,
+                      width: "100%",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.2)";
+                    }}>
+                    Resume
+                  </button>
+                  <button
+                    onClick={restartGame}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                      fontFamily: "Upheav, sans-serif",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      transition: "background-color 0.2s",
+                      flex: 1,
+                      width: "100%",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.2)";
+                    }}>
+                    Restart
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (onQuit) {
+                        onQuit();
+                      }
+                    }}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      border: "2px solid #fff",
+                      color: "#fff",
+                      fontFamily: "Upheav, sans-serif",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      transition: "background-color 0.2s",
+                      flex: 1,
+                      width: "100%",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.2)";
+                    }}>
+                    Quit
+                  </button>
+                </div>
                 <button
-                  onClick={() => setIsPaused(false)}
+                  onClick={toggleMute}
                   style={{
                     padding: "12px 24px",
                     backgroundColor: "rgba(255, 255, 255, 0.2)",
@@ -631,8 +795,6 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                     fontSize: "14px",
                     cursor: "pointer",
                     transition: "background-color 0.2s",
-                    flex: 1,
-                    width: "100%",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor =
@@ -642,88 +804,13 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                     e.currentTarget.style.backgroundColor =
                       "rgba(255, 255, 255, 0.2)";
                   }}>
-                  Resume
-                </button>
-                <button
-                  onClick={restartGame}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                    fontFamily: "Upheav, sans-serif",
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s",
-                    flex: 1,
-                    width: "100%",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.2)";
-                  }}>
-                  Restart
-                </button>
-                <button
-                  onClick={() => {
-                    if (onQuit) {
-                      onQuit();
-                    }
-                  }}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                    fontFamily: "Upheav, sans-serif",
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s",
-                    flex: 1,
-                    width: "100%",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.2)";
-                  }}>
-                  Quit
+                  {isMuted ? "Unmute" : "Mute"}
                 </button>
               </div>
-              <button
-                onClick={toggleMute}
-                style={{
-                  padding: "12px 24px",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  border: "2px solid #fff",
-                  color: "#fff",
-                  fontFamily: "Upheav, sans-serif",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  transition: "background-color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255, 255, 255, 0.2)";
-                }}>
-                {isMuted ? "Unmute" : "Mute"}
-              </button>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

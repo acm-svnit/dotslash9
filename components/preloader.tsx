@@ -6,7 +6,7 @@ import { useAudio } from "@/contexts/audio-context";
 const ASSETS = [
   "/bg1.png",
   "/bg2.png",
-  "/bullet.png",
+  "/bullets.png",
   "/enemy.png",
   "/ship.png",
   "/space/planet1.gif",
