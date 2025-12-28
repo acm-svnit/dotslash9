@@ -62,7 +62,7 @@ export const ExplosionSprite: React.FC<ExplosionSpriteProps> = ({
         top,
         width: EXPLOSION_SIZE,
         height: EXPLOSION_SIZE,
-        backgroundImage: "url(/explosion.png)",
+        backgroundImage: "url(/game/explosion.png)",
         backgroundRepeat: "no-repeat",
         backgroundSize: `${spriteSheetWidth}px ${spriteSheetHeight}px`,
         backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,

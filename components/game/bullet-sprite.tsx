@@ -47,7 +47,7 @@ export const BulletSprite: React.FC<BulletSpriteProps> = ({
         bottom,
         width: BULLET_SIZE,
         height: BULLET_SIZE,
-        backgroundImage: "url(/bullets.png)",
+        backgroundImage: "url(/game/bullets.png)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
         imageRendering: "pixelated",

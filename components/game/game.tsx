@@ -54,10 +54,20 @@ type GameProps = {
   onPauseChange?: (isPaused: boolean) => void;
 };
 
-export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
+const WARNING_MESSAGE =
+  "Your spaceship is breaking down! Cooldowns must be activated!";
+
+export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const spriteScale = useSpriteScale();
   const { isMuted, toggleMute } = useAudio();
+  const [effectsMuted, setEffectsMuted] = useState(false);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+
+  const shootAudioRef = useRef<HTMLAudioElement | null>(null);
+  const explosionAudioRef = useRef<HTMLAudioElement | null>(null);
+  const gameOverAudioRef = useRef<HTMLAudioElement | null>(null);
+  const warningAudioRef = useRef<HTMLAudioElement | null>(null);
+  const warningPlayedRef = useRef<boolean>(false);
 
   const [ship, setShip] = useState<ShipState>({ x: 0, v: 0 });
   const shipRef = useRef<ShipState>({ x: 0, v: 0 });
@@ -65,6 +75,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
   const [bullets, setBullets] = useState<Bullet[]>([]);
   const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [explosions, setExplosions] = useState<Explosion[]>([]);
+  const [warningText, setWarningText] = useState("");
 
   const bulletsRef = useRef<Bullet[]>([]);
   const enemiesRef = useRef<Enemy[]>([]);
@@ -89,6 +100,32 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
   }, []);
 
   useEffect(() => {
+    shootAudioRef.current = new Audio("/game/shoot.wav");
+    explosionAudioRef.current = new Audio("/game/explosion.wav");
+    gameOverAudioRef.current = new Audio("/game/gameover.wav");
+    warningAudioRef.current = new Audio("/game/warning.mp3");
+
+    return () => {
+      if (shootAudioRef.current) {
+        shootAudioRef.current.pause();
+        shootAudioRef.current = null;
+      }
+      if (explosionAudioRef.current) {
+        explosionAudioRef.current.pause();
+        explosionAudioRef.current = null;
+      }
+      if (gameOverAudioRef.current) {
+        gameOverAudioRef.current.pause();
+        gameOverAudioRef.current = null;
+      }
+      if (warningAudioRef.current) {
+        warningAudioRef.current.pause();
+        warningAudioRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -97,7 +134,51 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (gameOver && gameOverAudioRef.current && !effectsMuted) {
+      gameOverAudioRef.current.currentTime = 0;
+      gameOverAudioRef.current.play().catch(() => {});
+    }
+  }, [gameOver, effectsMuted]);
+
+  useEffect(() => {
+    if (
+      score >= 100 &&
+      !warningPlayedRef.current &&
+      warningAudioRef.current &&
+      !effectsMuted
+    ) {
+      warningPlayedRef.current = true;
+      warningAudioRef.current.currentTime = 0;
+      warningAudioRef.current.play().catch(() => {});
+    }
+  }, [score, effectsMuted]);
+
+  useEffect(() => {
+    if (score < 100) {
+      setWarningText("");
+      return;
+    }
+
+    if (warningText.length >= WARNING_MESSAGE.length) {
+      return;
+    }
+
+    const typewriterInterval = setInterval(() => {
+      setWarningText((prev) => {
+        if (prev.length < WARNING_MESSAGE.length) {
+          return WARNING_MESSAGE.slice(0, prev.length + 1);
+        }
+        return prev;
+      });
+    }, 25);
+
+    return () => clearInterval(typewriterInterval);
+  }, [score, warningText.length]);
+
   const restartGame = () => {
+    warningPlayedRef.current = false;
+    setWarningText("");
     const { width } = viewportSize;
     const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
     const startX = width
@@ -156,7 +237,12 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     ];
     bulletsRef.current = newBullets;
     setBullets(newBullets);
-  }, [gameOver, isPaused, score, spriteScale]);
+
+    if (shootAudioRef.current && !effectsMuted) {
+      shootAudioRef.current.currentTime = 0;
+      shootAudioRef.current.play().catch(() => {});
+    }
+  }, [gameOver, isPaused, score, spriteScale, effectsMuted]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -405,6 +491,12 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
               enemyAlive[j] = true;
 
               setScore((prev) => prev + 1);
+
+              if (explosionAudioRef.current && !effectsMuted) {
+                explosionAudioRef.current.currentTime = 0;
+                explosionAudioRef.current.play().catch(() => {});
+              }
+
               break;
             }
           }
@@ -464,7 +556,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     <div className="relative w-full h-screen overflow-hidden">
       <ShipSprite x={ship.x} bottom={SHIP_BOTTOM_OFFSET} fps={12} />
 
-      {score >= 100 && (
+      {score >= 100 && warningText && (
         <div
           className="absolute left-1/2 -translate-x-1/2 font-[Upheav] text-sm md:text-base text-center whitespace-nowrap z-10"
           style={{
@@ -473,7 +565,10 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
             }px`,
             animation: "flashRedOrange 0.5s ease-in-out infinite",
           }}>
-          Your spaceship is breaking down! Cooldowns must be activated!
+          {warningText}
+          {warningText.length < WARNING_MESSAGE.length && (
+            <span className="animate-pulse">|</span>
+          )}
         </div>
       )}
 
@@ -518,8 +613,10 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
           onResume={() => setIsPaused(false)}
           onRestart={restartGame}
           onQuit={onQuit}
-          onToggleMute={toggleMute}
-          isMuted={isMuted}
+          onToggleEffectsMute={() => setEffectsMuted(!effectsMuted)}
+          effectsMuted={effectsMuted}
+          onToggleMusicMute={toggleMute}
+          musicMuted={isMuted}
         />
       )}
 
@@ -535,7 +632,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                 isMobile ? "p-6 px-4" : "p-10"
               } flex flex-col items-center ${
                 isMobile ? "gap-5" : "gap-[30px]"
-              } w-full max-w-[420px] box-border rounded-lg`}>
+              } w-full max-w-[420px] box-border`}>
               <h2
                 className={`text-white font-[Upheav] ${
                   isMobile ? "text-3xl" : "text-5xl"

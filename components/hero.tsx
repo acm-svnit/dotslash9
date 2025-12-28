@@ -7,9 +7,10 @@ import ShootingStars from "@/components/shooting-stars";
 
 type HeroProps = {
   bgReady?: boolean;
+  onTextAnimationStart?: () => void;
 };
 
-export default function Hero({ bgReady: externalBgReady }: HeroProps) {
+export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }: HeroProps) {
   const [showGame, setShowGame] = useState(false);
   const [isGamePaused, setIsGamePaused] = useState(false);
   const [heroBgReady, setHeroBgReady] = useState(false);
@@ -73,6 +74,9 @@ export default function Hero({ bgReady: externalBgReady }: HeroProps) {
       delay: lettersDelay,
       onComplete: () => {
         setBgReady(true);
+        if (onTextAnimationStart) {
+          onTextAnimationStart();
+        }
       },
     });
   }, [lettersReady]);

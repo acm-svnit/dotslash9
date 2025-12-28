@@ -12,6 +12,8 @@ import Navbar from "@/components/navbar";
 
 export default function HomePage() {
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [navbarVisible, setNavbarVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,8 +33,19 @@ export default function HomePage() {
 
   return (
     <main style={{ position: "relative", width: "100%", overflowX: "hidden" }}>
-      <Navbar opacity={isAtBottom ? 0 : 1} />
-      <Hero />
+      {showNavbar && (
+        <Navbar
+          opacity={isAtBottom ? 0 : navbarVisible ? 1 : 0}
+          isAnimating={navbarVisible}
+        />
+      )}
+      <Hero
+        onTextAnimationStart={() => {
+          setShowNavbar(true);
+
+          setTimeout(() => setNavbarVisible(true), 100);
+        }}
+      />
       <AboutSection />
       <ThemesSection />
       <SponsorSection />

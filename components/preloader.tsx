@@ -6,9 +6,9 @@ import { useAudio } from "@/contexts/audio-context";
 const ASSETS = [
   "/bg1.png",
   "/bg2.png",
-  "/bullets.png",
-  "/enemy.png",
-  "/ship.png",
+  "/game/bullets.png",
+  "/game/enemy.png",
+  "/game/ship.png",
   "/space/planet1.gif",
   "/space/planet2.gif",
   "/space/planet3.gif",
@@ -204,6 +204,16 @@ export default function Preloader({ children }: PreloaderProps) {
               opacity: 0.7,
             }}>
             {progress}%
+          </div>
+          <div
+            style={{
+              color: "#ef4444",
+              fontFamily: "Upheav, sans-serif",
+              fontSize: "14px",
+              marginTop: "30px",
+              animation: "flashRedOrange 0.5s ease-in-out infinite",
+            }}>
+            Keep audio on for the full experience!
           </div>
         </div>
       ) : (

@@ -6,9 +6,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface NavbarProps {
   opacity?: number;
+  isAnimating?: boolean;
 }
 
-export default function Navbar({ opacity = 1 }: NavbarProps) {
+export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
   const pathname = usePathname();
@@ -131,12 +132,12 @@ export default function Navbar({ opacity = 1 }: NavbarProps) {
           position: "fixed",
           top: "clamp(15px, 2vh, 20px)",
           left: "50%",
-          transform: "translateX(-50%)",
+          transform: isAnimating ? "translateX(-50%)" : "translateX(-50%) translateY(-20px)",
           zIndex: 1000,
           width: "auto",
           maxWidth: isMobile ? "95%" : "90%",
           opacity: opacity,
-          transition: "opacity 0.3s ease-in-out",
+          transition: "opacity 0.6s ease-out, transform 0.6s ease-out",
           pointerEvents: opacity === 0 ? "none" : "auto",
         }}
       >

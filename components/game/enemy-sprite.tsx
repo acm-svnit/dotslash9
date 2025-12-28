@@ -48,7 +48,7 @@ export const EnemySprite: React.FC<EnemySpriteProps> = ({
         top,
         width: ENEMY_WIDTH,
         height: ENEMY_HEIGHT,
-        backgroundImage: "url(/enemy.png)",
+        backgroundImage: "url(/game/enemy.png)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
         imageRendering: "pixelated",

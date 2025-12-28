@@ -48,7 +48,7 @@ export const ShipSprite: React.FC<ShipSpriteProps> = ({
         bottom,
         width: SHIP_FRAME_WIDTH,
         height: SHIP_FRAME_HEIGHT,
-        backgroundImage: "url(/ship.png)",
+        backgroundImage: "url(/game/ship.png)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
         imageRendering: "pixelated",
