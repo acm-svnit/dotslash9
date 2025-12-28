@@ -19,7 +19,7 @@ export default function ContactSection() {
         boxSizing: "border-box",
       }}>
       <img
-        src="/gas2.gif"
+        src="/space/gas2.gif"
         alt="Gas"
         style={{
           position: "absolute",
@@ -196,7 +196,10 @@ export default function ContactSection() {
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.629971364225!2d72.78262877506033!3d21.16711918051706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04dec8b56fdf3%3A0x423b99085d26d1f9!2sSardar%20Vallabhbhai%20National%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1765125424543!5m2!1sen!2sin"
             width="100%"
             height="100%"
-            style={{ border: 0 }}
+            style={{ 
+              border: 0,
+              filter: "invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)",
+            }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

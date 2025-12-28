@@ -9,10 +9,10 @@ const ASSETS = [
   "/bullet.png",
   "/enemy.png",
   "/ship.png",
-  "/planet1.gif",
-  "/planet2.gif",
-  "/planet3.gif",
-  "/planet4.gif",
+  "/space/planet1.gif",
+  "/space/planet2.gif",
+  "/space/planet3.gif",
+  "/space/planet4.gif",
 ];
 
 type PreloaderProps = {

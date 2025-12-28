@@ -72,7 +72,7 @@ export default function AboutSection() {
         </h2>
         <div className="relative w-full max-w-4xl mb-12">
           <img
-            src="/planet1.gif"
+            src="/space/planet1.gif"
             alt="Planet"
             className="planet-left-top"
             style={{
@@ -90,7 +90,7 @@ export default function AboutSection() {
             }}
           />
           <img
-            src="/planet6.gif"
+            src="/space/planet6.gif"
             alt="Planet"
             className="planet-right-bottom"
             style={{
@@ -226,7 +226,7 @@ export default function AboutSection() {
         </div>
         <div className="w-full max-w-5xl mt-12 mb-12 relative">
           <img
-            src="/star2.gif"
+            src="/space/star2.gif"
             alt="Star"
             className="prizes-star"
             style={{

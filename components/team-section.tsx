@@ -18,7 +18,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Smit Marakna",
     role: "Chairperson",
-    image: "/smit.jpg",
+    image: "/team/smit.jpg",
     email: "mailto:smitmarakna1709@gmail.com",
     linkedin: "https://www.linkedin.com/in/smit-marakna-185456291",
     github: "https://github.com/smitmarakna/",
@@ -26,7 +26,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Chetan Kalsariya",
     role: "Vice-Chairperson",
-    image: "/chetan.jpg",
+    image: "/team/chetan.jpg",
     email: "mailto:chetan.v.kalsariya@gmail.com",
     linkedin: "https://www.linkedin.com/in/chetan-kalsariya",
     github: "https://github.com/lost-alchemistt",
@@ -34,7 +34,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Jay Pipaliya",
     role: "Secretary",
-    image: "/jay.jpg",
+    image: "/team/jay.jpg",
     email: "mailto:jaypipaliya0101@gmail.com",
     linkedin: "https://www.linkedin.com/in/jay-pipaliya-117369326",
     github: "https://github.com/jayp927",
@@ -42,7 +42,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Archit Savaliya",
     role: "Secretary",
-    image: "/archit.jpg",
+    image: "/team/archit.jpg",
     email: "mailto:architsavaliya175@gmail.com",
     linkedin: "https://www.linkedin.com/in/architsavaliya",
     github: "https://github.com/Archit-175",
@@ -50,7 +50,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Dhruv Patel",
     role: "Treasurer",
-    image: "/dhruv.jpg",
+    image: "/team/dhruv.jpg",
     email: "mailto:dhruvap2005@gmail.com",
     linkedin: "https://www.linkedin.com/in/dhruv-patel-15a9082a9/",
     github: "https://github.com/Cosmic717",
@@ -58,7 +58,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Anand Tiwari",
     role: "Treasurer",
-    image: "/anand.jpg",
+    image: "/team/anand.jpg",
     email: "mailto:anandgtiwari2005@gmail.com",
     linkedin: "https://www.linkedin.com/in/anand-tiwari-271078235/",
     github: "https://github.com/Anand-Tiwari2404",
@@ -66,14 +66,14 @@ const teamMembers: TeamMember[] = [
   {
     name: "Foram Gandhi",
     role: "Community Head",
-    image: "/foram.jpg",
+    image: "/team/foram.jpg",
     email: "mailto:gandhiforam91@gmail.com",
     linkedin: "https://www.linkedin.com/in/foram-gandhi-85a045326",
   },
   {
     name: "Miten Gandhi",
     role: "Developer",
-    image: "/miten.jpg",
+    image: "/team/miten.jpg",
     email: "mailto:mjgandhi2305@gmail.com",
     linkedin: "https://www.linkedin.com/in/miten-j-gandhi",
     github: "https://github.com/mjgandhi2305",
@@ -81,7 +81,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Purv Kabaria",
     role: "Developer",
-    image: "/purv.jpg",
+    image: "/team/purv.jpg",
     email: "mailto:purvkabaria@gmail.com",
     linkedin: "https://www.linkedin.com/in/purv-kabaria/",
     github: "https://github.com/Purv-Kabaria",
@@ -90,7 +90,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Om Satodiya",
     role: "Developer",
-    image: "/om.jpg",
+    image: "/team/om.jpg",
     email: "mailto:omsatodiya96@gmail.com",
     linkedin: "https://www.linkedin.com/in/om-satodiya9609",
     github: "https://github.com/omsatodiya",
@@ -98,7 +98,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Vanshik Godeshwar",
     role: "Problem Setter",
-    image: "/vanshik.jpg",
+    image: "/team/vanshik.jpg",
     email: "mailto:vanshikgodeshwar@gmail.com",
     linkedin: "https://www.linkedin.com/in/vanshikgodeshwar/",
     github: "https://github.com/vanshik79godeshwar",
@@ -106,21 +106,21 @@ const teamMembers: TeamMember[] = [
   {
     name: "Deepak Challa",
     role: "Problem Setter",
-    image: "/deepak.jpg",
+    image: "/team/deepak.jpg",
     email: "mailto:challadeepaksai55@gmail.com",
     linkedin: "https://www.linkedin.com/in/deepak-sai-challa-7a2240331",
   },
   {
     name: "Anshul Reddy",
     role: "Problem Setter",
-    image: "/anshul.jpg",
+    image: "/team/anshul.jpg",
     email: "mailto:kanshulreddy93@gmail.com",
     linkedin: "https://www.linkedin.com/in/anshul-reddy-kotha/",
   },
   {
     name: "Angela Dutta",
     role: "Designer",
-    image: "/angela.jpg",
+    image: "/team/angela.jpg",
     email: "mailto:duttaangela28@gmail.com",
     linkedin: "https://www.linkedin.com/in/angela-dutta/",
     github: "https://github.com/ang-dutta",
@@ -128,14 +128,14 @@ const teamMembers: TeamMember[] = [
   {
     name: "Vanishka Karkera",
     role: "Designer",
-    image: "/vanishka.jpg",
+    image: "/team/vanishka.jpg",
     email: "mailto:vanishka.sk@gmail.com",
     linkedin: "https://www.linkedin.com/in/vanishka-k-853593287/",
   },
   {
     name: "Harshil Andhariya",
     role: "Core Member",
-    image: "/harshil.jpg",
+    image: "/team/harshil.jpg",
     email: "mailto:harshilandhariya.2507@gmail.com",
     linkedin: "https://www.linkedin.com/in/harshilpf2507",
     github: "https://github.com/harshil-2507",
@@ -143,14 +143,14 @@ const teamMembers: TeamMember[] = [
   {
     name: "Manthan Chauhan",
     role: "Core Member",
-    image: "/manthan.jpg",
+    image: "/team/manthan.jpg",
     email: "mailto:manthansvnit9868@gmail.com",
     linkedin: "https://www.linkedin.com/in/manthan-chauhan-373a5a2a8/",
   },
   {
     name: "Govind",
     role: "Core Member",
-    image: "/govind.jpg",
+    image: "/team/govind.jpg",
     email: "mailto:realgovindkrishna@gmail.com",
     linkedin: "https://www.linkedin.com/in/govindkrishna2005",
     github: "https://github.com/govind2005",
@@ -178,7 +178,7 @@ export default function TeamSection() {
       }}
     >
       <img
-        src="/planet7.gif"
+        src="/space/planet7.gif"
         alt="Planet"
         style={{
           position: "absolute",
@@ -195,7 +195,7 @@ export default function TeamSection() {
         }}
       />
       <img
-        src="/planet8.gif"
+        src="/space/planet8.gif"
         alt="Planet"
         style={{
           position: "absolute",

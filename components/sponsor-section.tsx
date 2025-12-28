@@ -15,26 +15,26 @@ const sponsors = [
   "Krishost",
   "Mira",
   "Polygon",
-  "Rosenfield",
+  "Rosenfeld",
   "Twilio",
   "Wolfram",
 ];
 
 const sponsorLogos: Record<string, string> = {
-  GitHub: "/github.png",
-  DigitalOcean: "/digitalocean.jpg",
-  Devfolio: "/devfolio.jpg",
-  ETHIndia: "/ethindia.webp",
-  CodingBlocks: "/codingblocks.jpg",
-  Beeceptor: "/beeceptor.png",
-  Avadh: "/avadh.jpg",
-  GiveMyCertificate: "/givemycertificate.png",
-  Krishost: "/krishost.png",
-  Mira: "/mira.png",
-  Polygon: "/polygon.png",
-  Rosenfield: "/rosenfield.png",
-  Twilio: "/twilio.png",
-  Wolfram: "/wolfram.png",
+  GitHub: "/sponsors/github.png",
+  DigitalOcean: "/sponsors/digitalocean.png",
+  Devfolio: "/sponsors/devfolio.png",
+  ETHIndia: "/sponsors/ethindia.png",
+  CodingBlocks: "/sponsors/codingblocks.png",
+  Beeceptor: "/sponsors/beeceptor.png",
+  Avadh: "/sponsors/avadh.png",
+  GiveMyCertificate: "/sponsors/givemy.png",
+  Krishost: "/sponsors/krishost.png",
+  Mira: "/sponsors/mira.png",
+  Polygon: "/sponsors/polygon.png",
+  Rosenfeld: "/sponsors/rosenfeld.png",
+  Twilio: "/sponsors/twilio.png",
+  Wolfram: "/sponsors/wolfram.png",
 };
 
 export default function SponsorSection() {
@@ -56,7 +56,7 @@ export default function SponsorSection() {
       }}
     >
       <img
-        src="/planet3.gif"
+        src="/space/planet3.gif"
         alt="Planet"
         style={{
           position: "absolute",
@@ -73,7 +73,7 @@ export default function SponsorSection() {
         }}
       />
       <img
-        src="/planet5.gif"
+        src="/space/planet5.gif"
         alt="Planet"
         style={{
           position: "absolute",
@@ -136,7 +136,7 @@ export default function SponsorSection() {
             width: "100%",
             display: "grid",
             gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
-            gap: "clamp(20px, 3vw, 40px)",
+            gap: "clamp(4px, 0.8vw, 10px)",
             padding: "clamp(10px, 2vw, 20px)",
           }}
         >
@@ -147,73 +147,144 @@ export default function SponsorSection() {
             return (
               <div
                 key={index}
+                className="group"
                 style={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #392e4e",
+                  backgroundColor: "#060010",
+                  border: "1px solid rgba(75,85,255,0.3)",
                   borderRadius: "0",
-                  padding: "clamp(20px, 3vw, 30px)",
+                  padding: "clamp(2px, 0.4vw, 6px)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: "clamp(100px, 15vh, 150px)",
-                  transition: "all 0.3s ease",
+                  minHeight: "clamp(20px, 3vh, 40px)",
+                  height: "auto",
+                  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   position: "relative",
                   overflow: "hidden",
                   gridColumnStart: isSecondLast ? 2 : isLast ? 3 : "auto",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 30px rgba(75,85,255,0.5)";
-                  e.currentTarget.style.transform = "scale(1.05)";
+                    "0 0 40px rgba(75,85,255,0.6), 0 0 80px rgba(75,85,255,0.3), inset 0 0 30px rgba(75,85,255,0.1)";
+                  e.currentTarget.style.transform = "translateY(-8px) scale(1.03)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#392e4e";
+                  e.currentTarget.style.borderColor = "rgba(75,85,255,0.3)";
                   e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.transform = "translateY(0) scale(1)";
                 }}
               >
+                {/* Animated background gradient */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 50%, transparent 100%)",
+                  }}
+                />
+                
+                {/* Animated border glow */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
+                  style={{
+                    background:
+                      "radial-gradient(circle at center, rgba(75,85,255,0.2) 0%, transparent 70%)",
+                    filter: "blur(20px)",
+                  }}
+                />
+                
+                {/* Corner accents */}
                 <div
                   style={{
                     position: "absolute",
-                    inset: 0,
-                    background:
-                      "radial-gradient(circle at center, rgba(75,85,255,0.1) 0%, transparent 70%)",
-                    opacity: 0,
-                    transition: "opacity 0.3s ease",
-                    pointerEvents: "none",
+                    top: 0,
+                    left: 0,
+                    width: "30px",
+                    height: "30px",
+                    borderTop: "2px solid rgba(75,85,255,0)",
+                    borderLeft: "2px solid rgba(75,85,255,0)",
+                    transition: "border-color 0.3s ease",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = "1";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.opacity = "0";
-                  }}
+                  className="group-hover:border-[rgba(75,85,255,0.8)]"
                 />
-                <img
-                  src={sponsorLogos[sponsor] || "/github.png"}
-                  alt={sponsor}
+                <div
                   style={{
-                    maxWidth: "100%",
-                    maxHeight: "clamp(60px, 10vh, 100px)",
-                    objectFit: "contain",
-                    opacity: 1,
-                    transition: "all 0.3s ease",
-                    position: "relative",
-                    zIndex: 1,
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: "30px",
+                    height: "30px",
+                    borderTop: "2px solid rgba(75,85,255,0)",
+                    borderRight: "2px solid rgba(75,85,255,0)",
+                    transition: "border-color 0.3s ease",
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = "1";
-                    e.currentTarget.style.transform = "scale(1.1)";
-                    e.currentTarget.style.filter =
-                      "drop-shadow(0 0 15px rgba(75,85,255,0.8))";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.opacity = "1";
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.filter = "none";
-                  }}
+                  className="group-hover:border-[rgba(75,85,255,0.8)]"
                 />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "30px",
+                    height: "30px",
+                    borderBottom: "2px solid rgba(75,85,255,0)",
+                    borderLeft: "2px solid rgba(75,85,255,0)",
+                    transition: "border-color 0.3s ease",
+                  }}
+                  className="group-hover:border-[rgba(75,85,255,0.8)]"
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    width: "30px",
+                    height: "30px",
+                    borderBottom: "2px solid rgba(75,85,255,0)",
+                    borderRight: "2px solid rgba(75,85,255,0)",
+                    transition: "border-color 0.3s ease",
+                  }}
+                  className="group-hover:border-[rgba(75,85,255,0.8)]"
+                />
+                
+                {/* Logo container with better styling */}
+                <div
+                  style={{
+                    position: "relative",
+                    zIndex: 10,
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "clamp(2px, 0.4vw, 4px)",
+                  }}
+                >
+                  <img
+                    src={sponsorLogos[sponsor] || "/github.png"}
+                    alt={sponsor}
+                    style={{
+                      width: "auto",
+                      height: "auto",
+                      maxWidth: "clamp(80px, 10vw, 120px)",
+                      maxHeight: "clamp(80px, 10vh, 120px)",
+                      objectFit: "contain",
+                      opacity: 0.9,
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                      filter: "brightness(0.95) contrast(1.1)",
+                    }}
+                    className="group-hover:opacity-100 group-hover:scale-110 group-hover:brightness-110 group-hover:contrast-110"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.filter =
+                        "brightness(1.1) contrast(1.15) drop-shadow(0 0 20px rgba(75,85,255,0.6))";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.filter = "brightness(0.95) contrast(1.1)";
+                    }}
+                  />
+                </div>
               </div>
             );
           })}

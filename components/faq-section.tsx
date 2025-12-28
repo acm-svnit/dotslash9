@@ -99,7 +99,7 @@ export default function FAQSection() {
         boxSizing: "border-box",
       }}>
       <img
-        src="/gas1.gif"
+        src="/space/gas1.gif"
         alt="Gas"
         style={{
           position: "absolute",
@@ -116,7 +116,7 @@ export default function FAQSection() {
         }}
       />
       <img
-        src="/planet4.gif"
+        src="/space/planet4.gif"
         alt="Planet"
         style={{
           position: "absolute",

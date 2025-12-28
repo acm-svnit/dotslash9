@@ -46,7 +46,7 @@ export default function ThemesSection() {
         boxSizing: "border-box",
       }}>
       <img
-        src="/planet7.gif"
+        src="/space/planet7.gif"
         alt="Planet"
         className="themes-planet-left"
         style={{
@@ -64,7 +64,7 @@ export default function ThemesSection() {
         }}
       />
       <img
-        src="/planet8.gif"
+        src="/space/planet8.gif"
         alt="Planet"
         className="themes-planet-right"
         style={{
