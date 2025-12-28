@@ -282,12 +282,18 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
       let playerDead = false;
 
       if (width && height) {
+        const scoreMultiplier = Math.min(score, 200);
+        const currentSpawnInterval = Math.max(
+          ENEMY_SPAWN_INTERVAL - scoreMultiplier * 0.01,
+          0.5
+        );
+
         enemySpawnAccumulatorRef.current += deltaSeconds;
-        if (enemySpawnAccumulatorRef.current >= ENEMY_SPAWN_INTERVAL) {
+        if (enemySpawnAccumulatorRef.current >= currentSpawnInterval) {
           const spawns = Math.floor(
-            enemySpawnAccumulatorRef.current / ENEMY_SPAWN_INTERVAL
+            enemySpawnAccumulatorRef.current / currentSpawnInterval
           );
-          enemySpawnAccumulatorRef.current -= spawns * ENEMY_SPAWN_INTERVAL;
+          enemySpawnAccumulatorRef.current -= spawns * currentSpawnInterval;
 
           for (let i = 0; i < spawns; i++) {
             const id = enemyIdRef.current++;
@@ -307,6 +313,10 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
           .filter((b) => b.bottom <= height + bulletScaledSize);
 
         const now = performance.now();
+
+        // Calculate dynamic enemy speed based on score (0.01 per point)
+        const currentEnemySpeed = ENEMY_SPEED + scoreMultiplier * 0.01;
+
         enemies = enemies
           .map((e) => {
             if (e.isHit && e.hitTime) {
@@ -320,7 +330,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
             return {
               ...e,
-              top: e.top + ENEMY_SPEED * deltaSeconds,
+              top: e.top + currentEnemySpeed * deltaSeconds,
             };
           })
           .filter((e): e is Enemy => e !== null);
