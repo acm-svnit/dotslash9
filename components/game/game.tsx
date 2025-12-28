@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { PauseMenu } from "./pause-menu";
+import { Controls } from "./controls";
 import { ShipSprite, SHIP_FRAME_WIDTH, SHIP_FRAME_HEIGHT } from "./ship-sprite";
 import { BulletSprite, BULLET_SIZE } from "./bullet-sprite";
 import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "./enemy-sprite";
@@ -16,7 +18,7 @@ const SHIP_MAX_SPEED = 400;
 const SHIP_FRICTION = 900;
 
 const BULLET_SPEED = 600;
-const BULLET_COOLDOWN_MS = 200;
+const BULLET_COOLDOWN_MS = 100;
 
 const ENEMY_SPEED = 80;
 const ENEMY_SPAWN_INTERVAL = 1.5;
@@ -129,10 +131,13 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     keysRef.current = { left: false, right: false };
   };
 
-  const handleShoot = () => {
+  const handleShoot = useCallback(() => {
     if (gameOver || isPaused) return;
     const now = performance.now();
-    if (now - lastShotTimeRef.current < BULLET_COOLDOWN_MS) return;
+
+    const currentCooldown = score >= 100 ? 250 : BULLET_COOLDOWN_MS;
+
+    if (now - lastShotTimeRef.current < currentCooldown) return;
     lastShotTimeRef.current = now;
 
     const shipX = shipRef.current.x;
@@ -151,7 +156,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     ];
     bulletsRef.current = newBullets;
     setBullets(newBullets);
-  };
+  }, [gameOver, isPaused, score, spriteScale]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -224,7 +229,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gameOver, isPaused, onQuit]);
+  }, [gameOver, isPaused, onQuit, handleShoot]);
 
   useEffect(() => {
     if (!viewportSize.width || !viewportSize.height || gameOver || isPaused)
@@ -314,7 +319,6 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
 
         const now = performance.now();
 
-        // Calculate dynamic enemy speed based on score (0.01 per point)
         const currentEnemySpeed = ENEMY_SPEED + scoreMultiplier * 0.01;
 
         enemies = enemies
@@ -460,6 +464,19 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
     <div className="relative w-full h-screen overflow-hidden">
       <ShipSprite x={ship.x} bottom={SHIP_BOTTOM_OFFSET} fps={12} />
 
+      {score >= 100 && (
+        <div
+          className="absolute left-1/2 -translate-x-1/2 font-[Upheav] text-sm md:text-base text-center whitespace-nowrap z-10"
+          style={{
+            bottom: `${
+              SHIP_BOTTOM_OFFSET + SHIP_FRAME_HEIGHT * spriteScale + 20
+            }px`,
+            animation: "flashRedOrange 0.5s ease-in-out infinite",
+          }}>
+          Your spaceship is breaking down! Cooldowns must be activated!
+        </div>
+      )}
+
       {bullets.map((b) => (
         <BulletSprite key={b.id} x={b.x} bottom={b.bottom} />
       ))}
@@ -472,146 +489,39 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
         <ExplosionSprite key={exp.id} x={exp.x} top={exp.top} />
       ))}
 
-      {isMobile && (
-        <div className="absolute bottom-5 left-5 flex gap-[15px] z-1000">
-          <button
-            onTouchStart={(e) => {
-              e.preventDefault();
-              if (!gameOver && !isPaused) {
-                keysRef.current.left = true;
-              }
-            }}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              keysRef.current.left = false;
-            }}
-            onMouseDown={() => {
-              if (!gameOver && !isPaused) {
-                keysRef.current.left = true;
-              }
-            }}
-            onMouseUp={() => {
-              keysRef.current.left = false;
-            }}
-            onMouseLeave={() => {
-              keysRef.current.left = false;
-            }}
-            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-lg cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
-            ←
-          </button>
+      <Controls
+        isMobile={isMobile}
+        gameOver={gameOver}
+        isPaused={isPaused}
+        score={score}
+        onLeftStart={() => {
+          keysRef.current.left = true;
+        }}
+        onLeftEnd={() => {
+          keysRef.current.left = false;
+        }}
+        onRightStart={() => {
+          keysRef.current.right = true;
+        }}
+        onRightEnd={() => {
+          keysRef.current.right = false;
+        }}
+        onShoot={handleShoot}
+        onPause={() => setIsPaused(true)}
+      />
 
-          <button
-            onTouchStart={(e) => {
-              e.preventDefault();
-              if (!gameOver && !isPaused) {
-                keysRef.current.right = true;
-              }
-            }}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              keysRef.current.right = false;
-            }}
-            onMouseDown={() => {
-              if (!gameOver && !isPaused) {
-                keysRef.current.right = true;
-              }
-            }}
-            onMouseUp={() => {
-              keysRef.current.right = false;
-            }}
-            onMouseLeave={() => {
-              keysRef.current.right = false;
-            }}
-            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-lg cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
-            →
-          </button>
-
-          <button
-            onTouchStart={(e) => {
-              e.preventDefault();
-              handleShoot();
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              handleShoot();
-            }}
-            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-xs cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
-            FIRE
-          </button>
-        </div>
+      {isPaused && (
+        <PauseMenu
+          score={score}
+          isMobile={isMobile}
+          mounted={mounted}
+          onResume={() => setIsPaused(false)}
+          onRestart={restartGame}
+          onQuit={onQuit}
+          onToggleMute={toggleMute}
+          isMuted={isMuted}
+        />
       )}
-
-      <div className="absolute bottom-5 right-5 flex flex-col items-end gap-2.5 z-1000">
-        <div className="text-white text-xs font-[Upheav] [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)]">
-          Score: {score}
-        </div>
-        <button
-          onClick={() => setIsPaused(true)}
-          className="px-4 py-2 bg-white/20 border-2 border-white text-white font-[Upheav] text-xs cursor-pointer [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)] transition-colors hover:bg-white/30">
-          Pause
-        </button>
-      </div>
-
-      {isPaused &&
-        mounted &&
-        createPortal(
-          <div
-            className={`fixed top-0 left-0 w-screen h-screen bg-black/80 flex flex-col items-center justify-center ${
-              isMobile ? "p-4" : "p-0"
-            } box-border z-99999`}>
-            <div
-              className={`bg-black border-2 border-white ${
-                isMobile ? "p-6 px-4" : "p-10"
-              } flex flex-col items-center ${
-                isMobile ? "gap-5" : "gap-[30px]"
-              } w-full max-w-[420px] box-border rounded-lg`}>
-              <h2
-                className={`text-white font-[Upheav] ${
-                  isMobile ? "text-xl" : "text-2xl"
-                } m-0 text-center`}>
-                Paused
-              </h2>
-              <div
-                className={`text-white font-[Upheav] ${
-                  isMobile ? "text-base" : "text-lg"
-                } text-center`}>
-                Score: {score}
-              </div>
-              <div className="flex flex-col gap-5 w-full">
-                <div
-                  className={`flex ${
-                    isMobile ? "flex-col gap-3" : "flex-row gap-5"
-                  } w-full`}>
-                  <button
-                    onClick={() => setIsPaused(false)}
-                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
-                    Resume
-                  </button>
-                  <button
-                    onClick={restartGame}
-                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
-                    Restart
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (onQuit) {
-                        onQuit();
-                      }
-                    }}
-                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
-                    Quit
-                  </button>
-                </div>
-                <button
-                  onClick={toggleMute}
-                  className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30">
-                  {isMuted ? "Unmute" : "Mute"}
-                </button>
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
 
       {gameOver &&
         mounted &&

@@ -309,3 +309,12 @@ main {
     opacity: 0.6;
   }
 }
+
+@keyframes flashRedOrange {
+  0%, 100% {
+    color: #ef4444; /* red-500 */
+  }
+  50% {
+    color: #f97316; /* orange-500 */
+  }
+}
