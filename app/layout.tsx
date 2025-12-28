@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/preloader";
-import CustomCursor from "@/components/custom-cursor";
 import { AudioProvider } from "@/contexts/audio-context";
 
 const inter = Inter({
@@ -110,7 +109,6 @@ export default function RootLayout({
         />
         <AudioProvider>
           <Preloader>
-            <CustomCursor />
             {children}
           </Preloader>
         </AudioProvider>

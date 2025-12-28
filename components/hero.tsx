@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Game } from "@/components/game";
+import { Game } from "@/components/game/game";
 import { gsap } from "gsap";
 import ShootingStars from "@/components/shooting-stars";
 

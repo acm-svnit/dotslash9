@@ -2,19 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  ShipSprite,
-  SHIP_FRAME_WIDTH,
-  SHIP_FRAME_HEIGHT,
-} from "@/components/ship-sprite";
-import { BulletSprite, BULLET_SIZE } from "@/components/bullet-sprite";
-import {
-  EnemySprite,
-  ENEMY_WIDTH,
-  ENEMY_HEIGHT,
-} from "@/components/enemy-sprite";
-import { ExplosionSprite, EXPLOSION_SIZE } from "@/components/explosion-sprite";
-import { useSpriteScale } from "@/components/use-sprite-scale";
+import { ShipSprite, SHIP_FRAME_WIDTH, SHIP_FRAME_HEIGHT } from "./ship-sprite";
+import { BulletSprite, BULLET_SIZE } from "./bullet-sprite";
+import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "./enemy-sprite";
+import { ExplosionSprite, EXPLOSION_SIZE } from "./explosion-sprite";
+import { useSpriteScale } from "./use-sprite-scale";
 import { useAudio } from "@/contexts/audio-context";
 
 const SHIP_BOTTOM_OFFSET = 80;
@@ -455,13 +447,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
   }, [viewportSize, gameOver, spriteScale, isPaused]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100vh",
-        overflow: "hidden",
-      }}>
+    <div className="relative w-full h-screen overflow-hidden">
       <ShipSprite x={ship.x} bottom={SHIP_BOTTOM_OFFSET} fps={12} />
 
       {bullets.map((b) => (
@@ -477,15 +463,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
       ))}
 
       {isMobile && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            left: "20px",
-            display: "flex",
-            gap: "15px",
-            zIndex: 1000,
-          }}>
+        <div className="absolute bottom-5 left-5 flex gap-[15px] z-1000">
           <button
             onTouchStart={(e) => {
               e.preventDefault();
@@ -508,22 +486,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
             onMouseLeave={() => {
               keysRef.current.left = false;
             }}
-            style={{
-              width: "40px",
-              height: "40px",
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "2px solid #fff",
-              color: "#fff",
-              fontFamily: "Upheav, sans-serif",
-              fontSize: "18px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              imageRendering: "pixelated",
-              userSelect: "none",
-              touchAction: "manipulation",
-            }}>
+            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-lg cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
             ←
           </button>
 
@@ -549,22 +512,7 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
             onMouseLeave={() => {
               keysRef.current.right = false;
             }}
-            style={{
-              width: "40px",
-              height: "40px",
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "2px solid #fff",
-              color: "#fff",
-              fontFamily: "Upheav, sans-serif",
-              fontSize: "18px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              imageRendering: "pixelated",
-              userSelect: "none",
-              touchAction: "manipulation",
-            }}>
+            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-lg cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
             →
           </button>
 
@@ -577,66 +525,19 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
               e.preventDefault();
               handleShoot();
             }}
-            style={{
-              width: "40px",
-              height: "40px",
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              border: "2px solid #fff",
-              color: "#fff",
-              fontFamily: "Upheav, sans-serif",
-              fontSize: "12px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              imageRendering: "pixelated",
-              userSelect: "none",
-              touchAction: "manipulation",
-            }}>
+            className="w-10 h-10 bg-white/20 border-2 border-white text-white font-[Upheav] text-xs cursor-pointer flex items-center justify-center [image-rendering:pixelated] select-none touch-manipulation">
             FIRE
           </button>
         </div>
       )}
 
-      <div
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          right: "20px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: "10px",
-          zIndex: 1000,
-        }}>
-        <div
-          style={{
-            color: "#fff",
-            fontSize: "12px",
-            fontFamily: "Upheav, sans-serif",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-          }}>
+      <div className="absolute bottom-5 right-5 flex flex-col items-end gap-2.5 z-1000">
+        <div className="text-white text-xs font-[Upheav] [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)]">
           Score: {score}
         </div>
         <button
           onClick={() => setIsPaused(true)}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-            border: "2px solid #fff",
-            color: "#fff",
-            fontFamily: "Upheav, sans-serif",
-            fontSize: "12px",
-            cursor: "pointer",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
-            transition: "background-color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
-          }}>
+          className="px-4 py-2 bg-white/20 border-2 border-white text-white font-[Upheav] text-xs cursor-pointer [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)] transition-colors hover:bg-white/30">
           Pause
         </button>
       </div>
@@ -645,114 +546,40 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
         mounted &&
         createPortal(
           <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0, 0, 0, 0.8)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: isMobile ? "16px" : 0,
-              boxSizing: "border-box",
-              zIndex: 99999,
-            }}>
+            className={`fixed top-0 left-0 w-screen h-screen bg-black/80 flex flex-col items-center justify-center ${
+              isMobile ? "p-4" : "p-0"
+            } box-border z-99999`}>
             <div
-              style={{
-                backgroundColor: "#000",
-                border: "2px solid #fff",
-                padding: isMobile ? "24px 16px" : "40px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: isMobile ? "20px" : "30px",
-                width: "100%",
-                maxWidth: "420px",
-                boxSizing: "border-box",
-                borderRadius: "8px",
-              }}>
+              className={`bg-black border-2 border-white ${
+                isMobile ? "p-6 px-4" : "p-10"
+              } flex flex-col items-center ${
+                isMobile ? "gap-5" : "gap-[30px]"
+              } w-full max-w-[420px] box-border rounded-lg`}>
               <h2
-                style={{
-                  color: "#fff",
-                  fontFamily: "Upheav, sans-serif",
-                  fontSize: isMobile ? "20px" : "24px",
-                  margin: 0,
-                  textAlign: "center",
-                }}>
+                className={`text-white font-[Upheav] ${
+                  isMobile ? "text-xl" : "text-2xl"
+                } m-0 text-center`}>
                 Paused
               </h2>
               <div
-                style={{
-                  color: "#fff",
-                  fontFamily: "Upheav, sans-serif",
-                  fontSize: isMobile ? "16px" : "18px",
-                  textAlign: "center",
-                }}>
+                className={`text-white font-[Upheav] ${
+                  isMobile ? "text-base" : "text-lg"
+                } text-center`}>
                 Score: {score}
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "20px",
-                  width: "100%",
-                }}>
+              <div className="flex flex-col gap-5 w-full">
                 <div
-                  style={{
-                    display: "flex",
-                    flexDirection: isMobile ? "column" : "row",
-                    gap: isMobile ? "12px" : "20px",
-                    width: "100%",
-                  }}>
+                  className={`flex ${
+                    isMobile ? "flex-col gap-3" : "flex-row gap-5"
+                  } w-full`}>
                   <button
                     onClick={() => setIsPaused(false)}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      border: "2px solid #fff",
-                      color: "#fff",
-                      fontFamily: "Upheav, sans-serif",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      transition: "background-color 0.2s",
-                      flex: 1,
-                      width: "100%",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.3)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.2)";
-                    }}>
+                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
                     Resume
                   </button>
                   <button
                     onClick={restartGame}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      border: "2px solid #fff",
-                      color: "#fff",
-                      fontFamily: "Upheav, sans-serif",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      transition: "background-color 0.2s",
-                      flex: 1,
-                      width: "100%",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.3)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.2)";
-                    }}>
+                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
                     Restart
                   </button>
                   <button
@@ -761,51 +588,66 @@ export const Game: React.FC<GameProps> = ({ onQuit, onPauseChange }) => {
                         onQuit();
                       }
                     }}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      border: "2px solid #fff",
-                      color: "#fff",
-                      fontFamily: "Upheav, sans-serif",
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      transition: "background-color 0.2s",
-                      flex: 1,
-                      width: "100%",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.3)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.2)";
-                    }}>
+                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
                     Quit
                   </button>
                 </div>
                 <button
                   onClick={toggleMute}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    border: "2px solid #fff",
-                    color: "#fff",
-                    fontFamily: "Upheav, sans-serif",
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      "rgba(255, 255, 255, 0.2)";
-                  }}>
+                  className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30">
                   {isMuted ? "Unmute" : "Mute"}
                 </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {gameOver &&
+        mounted &&
+        createPortal(
+          <div
+            className={`fixed top-0 left-0 w-screen h-screen bg-black/80 flex flex-col items-center justify-center ${
+              isMobile ? "p-4" : "p-0"
+            } box-border z-99999`}>
+            <div
+              className={`bg-black border-2 border-white ${
+                isMobile ? "p-6 px-4" : "p-10"
+              } flex flex-col items-center ${
+                isMobile ? "gap-5" : "gap-[30px]"
+              } w-full max-w-[420px] box-border rounded-lg`}>
+              <h2
+                className={`text-white font-[Upheav] ${
+                  isMobile ? "text-3xl" : "text-5xl"
+                } m-0 text-center`}>
+                Game Over
+              </h2>
+              <div
+                className={`text-white font-[Upheav] ${
+                  isMobile ? "text-2xl" : "text-4xl"
+                } text-center`}>
+                Score: {score}
+              </div>
+              <div className="flex flex-col gap-5 w-full">
+                <div
+                  className={`flex ${
+                    isMobile ? "flex-col gap-3" : "flex-row gap-5"
+                  } w-full`}>
+                  <button
+                    onClick={restartGame}
+                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
+                    Restart
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (onQuit) {
+                        onQuit();
+                      }
+                    }}
+                    className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
+                    Quit
+                  </button>
+                </div>
               </div>
             </div>
           </div>,

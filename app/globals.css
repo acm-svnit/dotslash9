@@ -20,13 +20,6 @@ main {
   ::-webkit-scrollbar {
     display: none;
   }
-  cursor: none !important;
-}
-
-@media (max-width: 768px) {
-  * {
-    cursor: auto !important;
-  }
 }
 
 /* Pixelated cursor rendering */

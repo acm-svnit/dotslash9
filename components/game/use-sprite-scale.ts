@@ -22,4 +22,3 @@ export function useSpriteScale(): number {
 
   return scale;
 }
-
