@@ -37,13 +37,14 @@ export default function VideosSection() {
         playsInline
         style={{
           position: "absolute",
-          top: "-10%",
+          top: "50%",
           left: "50%",
-          transform: "translateX(-50%)",
-          width: "110%",
-          height: "110%",
+          transform: "translate(-50%, -50%)",
+          width: "100%",
+          height: "100%",
           objectFit: "contain",
           pointerEvents: "none",
+          animation: "floatUpDown 4s ease-in-out infinite",
         }}
       />
     </div>
