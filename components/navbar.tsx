@@ -61,7 +61,7 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
   const handleDownloadBrochure = () => {
     const link = document.createElement("a");
     link.href =
-      "https://drive.google.com/file/d/1jV7ixTBVDMEM2efS9Mh8Y51HsNm7tAF8/view?usp=sharing";
+      "https://drive.google.com/file/d/1tRkWB0XUobO4tdO94E5l7OrCK1zIdIZn/view?usp=sharing";
     link.download = "DOTSLASH-9.0-Brochure.pdf";
     document.body.appendChild(link);
     link.click();
