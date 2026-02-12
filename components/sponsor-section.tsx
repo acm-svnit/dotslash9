@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const sponsors = [
@@ -184,7 +183,7 @@ export default function SponsorSection() {
                       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 50%, transparent 100%)",
                   }}
                 />
-                
+
                 {/* Animated border glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
@@ -194,7 +193,7 @@ export default function SponsorSection() {
                     filter: "blur(20px)",
                   }}
                 />
-                
+
                 {/* Corner accents */}
                 <div
                   style={{
@@ -248,7 +247,7 @@ export default function SponsorSection() {
                   }}
                   className="group-hover:border-[rgba(75,85,255,0.8)]"
                 />
-                
+
                 {/* Logo container with better styling */}
                 <div
                   style={{

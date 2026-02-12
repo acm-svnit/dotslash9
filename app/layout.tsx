@@ -18,11 +18,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Dotslash 9.0 - Hackathon & Tech Event",
+    default: "Dotslash 9.0 - Hackathon",
     template: "%s | Dotslash 9.0",
   },
   description:
-    "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 48 hours of creation, collaboration, and impact.",
+    "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
   icons: {
     icon: "/dotslash.png",
     shortcut: "/dotslash.png",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   publisher: "Dotslash",
 
   openGraph: {
-    title: "Dotslash 9.0 - Hackathon & Tech Event",
+    title: "Dotslash 9.0 - Hackathon",
     description:
       "Join Dotslash 9.0, a high-energy hackathon where developers, designers, and innovators build the future together.",
     siteName: "Dotslash 9.0",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Dotslash 9.0 - Hackathon & Tech Event",
+    title: "Dotslash 9.0 - Hackathon",
     description:
       "Build, ship, and innovate at Dotslash 9.0 - a hackathon for developers, designers, and makers.",
     images: ["/dotslash.png"],
@@ -95,7 +95,7 @@ export default function RootLayout({
     url: siteUrl,
     logo: `${siteUrl}/dotslash.png`,
     description:
-      "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 48 hours of creation, collaboration, and impact.",
+      "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
   };
 
   return (

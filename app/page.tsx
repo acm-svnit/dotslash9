@@ -6,6 +6,7 @@ import AboutSection from "@/components/about-section";
 import FAQSection from "@/components/faq-section";
 import ContactSection from "@/components/contact-section";
 import SponsorSection from "@/components/sponsor-section";
+import CurrentSponsors from "@/components/current-sponsors";
 import ThemesSection from "@/components/themes-section";
 import VideosSection from "@/components/videos-section";
 import Navbar from "@/components/navbar";
@@ -48,6 +49,7 @@ export default function HomePage() {
       />
       <AboutSection />
       <ThemesSection />
+      <CurrentSponsors />
       <SponsorSection />
       <FAQSection />
       <ContactSection />

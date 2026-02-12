@@ -52,7 +52,7 @@ const faqData = [
   {
     question: "Is there a registration fee?",
     answer:
-      "Registration details and any associated fees will be announced on our official website and social media channels. Keep an eye out for updates regarding registration and participation costs.",
+      "There is absolutely NO registration fee, in fact, we'll be so generous as to provide ALL the shortlisted teams with their own custom DOTSLASH 9.0 merch.",
     color: "#4B55FF",
     gradient:
       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 100%)",
@@ -162,12 +162,12 @@ export default function FAQSection() {
             width: "100%",
             maxWidth: "900px",
           }}>
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full cursor-pointer">
             {faqData.map((faq, index) => (
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="border-[#392e4e] px-4 py-2 group relative overflow-hidden"
+                className="border-[#392e4e] px-4 py-2 cursor-pointer group relative overflow-hidden"
                 style={{
                   backgroundColor: "#060010",
                   borderRadius: "0",
@@ -194,7 +194,7 @@ export default function FAQSection() {
                     background: faq.gradient,
                   }}
                 />
-                
+
                 {/* Animated border glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
@@ -203,7 +203,7 @@ export default function FAQSection() {
                     filter: "blur(15px)",
                   }}
                 />
-                
+
                 {/* Left accent line */}
                 <div
                   style={{
@@ -218,7 +218,7 @@ export default function FAQSection() {
                   }}
                   className="group-hover:opacity-100"
                 />
-                
+
                 {/* Corner accents */}
                 <div
                   style={{
@@ -248,9 +248,9 @@ export default function FAQSection() {
                   }}
                   className="group-hover:opacity-100"
                 />
-                
+
                 <AccordionTrigger
-                  className="text-white transition-all duration-300 relative z-10"
+                  className="text-white transition-all cursor-pointer duration-300 relative z-10"
                   style={{
                     fontFamily: "Upheav, sans-serif",
                     fontSize: "clamp(18px, 3vw, 28px)",

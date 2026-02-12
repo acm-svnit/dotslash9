@@ -34,9 +34,9 @@ export default function ThemesSection() {
   return (
     <section
       style={{
-        minHeight: "100vh",
+        minHeight: "auto",
         backgroundColor: "#000",
-        padding: "clamp(20px, 4vh, 60px) clamp(10px, 2vw, 40px)",
+        padding: "clamp(60px, 10vh, 120px) clamp(10px, 2vw, 40px) 0px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -143,7 +143,7 @@ export default function ThemesSection() {
                   animation: "pulse 3s ease-in-out infinite",
                 }}
               />
-              
+
               {/* Animated border glow */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
@@ -152,7 +152,7 @@ export default function ThemesSection() {
                   filter: "blur(20px)",
                 }}
               />
-              
+
               {/* Animated corner accents */}
               <div
                 style={{
@@ -210,7 +210,7 @@ export default function ThemesSection() {
                 }}
                 className="group-hover:opacity-100"
               />
-              
+
               {/* Animated scan line effect */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-30 pointer-events-none z-10"
@@ -221,7 +221,7 @@ export default function ThemesSection() {
                   mixBlendMode: "screen",
                 }}
               />
-              
+
               <CardContent className="relative z-20 flex flex-col items-center text-center p-6">
                 {/* Icon placeholder with animated glow */}
                 <div
@@ -271,7 +271,7 @@ export default function ThemesSection() {
                     className="group-hover:opacity-50"
                   />
                 </div>
-                
+
                 <h3
                   style={{
                     fontFamily: "Upheav, sans-serif",
