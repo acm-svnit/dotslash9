@@ -81,6 +81,35 @@ main {
   }
 }
 
+@keyframes trophy-float-left {
+  0%,
+  100% {
+    transform: translate(-30%, -50%) rotate(-12deg) translateY(-10px);
+  }
+  50% {
+    transform: translate(-30%, -50%) rotate(-12deg) translateY(10px);
+  }
+}
+
+@keyframes trophy-float-right {
+  0%,
+  100% {
+    transform: translate(30%, -50%) rotate(12deg) translateY(-10px);
+  }
+  50% {
+    transform: translate(30%, -50%) rotate(12deg) translateY(10px);
+  }
+}
+
+.trophy-float-left {
+  animation: trophy-float-left 3s ease-in-out infinite;
+}
+
+.trophy-float-right {
+  animation: trophy-float-right 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
 .bento-section {
   position: relative !important;
   top: 0 !important;

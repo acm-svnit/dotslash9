@@ -9,7 +9,10 @@ interface NavbarProps {
   isAnimating?: boolean;
 }
 
-export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps) {
+export default function Navbar({
+  opacity = 1,
+  isAnimating = false,
+}: NavbarProps) {
   const isMobile = useIsMobile();
   const router = useRouter();
   const pathname = usePathname();
@@ -61,7 +64,7 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
   const handleDownloadBrochure = () => {
     const link = document.createElement("a");
     link.href =
-      "https://drive.google.com/file/d/1tRkWB0XUobO4tdO94E5l7OrCK1zIdIZn/view?usp=sharing";
+      "https://drive.google.com/file/d/1qtsyyet1-XE5pB-ynJO2DKPbttll3B2E/view?usp=sharing";
     link.download = "DOTSLASH-9.0-Brochure.pdf";
     document.body.appendChild(link);
     link.click();
@@ -132,7 +135,9 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
           position: "fixed",
           top: "clamp(15px, 2vh, 20px)",
           left: "50%",
-          transform: isAnimating ? "translateX(-50%)" : "translateX(-50%) translateY(-20px)",
+          transform: isAnimating
+            ? "translateX(-50%)"
+            : "translateX(-50%) translateY(-20px)",
           zIndex: 1000,
           width: "auto",
           maxWidth: isMobile ? "95%" : "90%",
@@ -147,7 +152,9 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
             backdropFilter: "blur(10px)",
             border: "1px solid #392e4e",
             borderRadius: "0",
-            padding: isMobile ? "clamp(4px, 0.8vw, 8px) clamp(8px, 1.5vw, 16px)" : "clamp(6px, 1vw, 10px) clamp(16px, 2.5vw, 30px)",
+            padding: isMobile
+              ? "clamp(4px, 0.8vw, 8px) clamp(8px, 1.5vw, 16px)"
+              : "clamp(6px, 1vw, 10px) clamp(16px, 2.5vw, 30px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -163,16 +170,24 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
               backgroundColor: "transparent",
               border: "1px solid rgba(75,85,255,0.5)",
               borderRadius: "0",
-              padding: isMobile ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)" : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
+              padding: isMobile
+                ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
+                : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
               fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
               transition: "all 0.3s ease",
               whiteSpace: "nowrap",
               lineHeight: "1.2",
-              width: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              minWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              maxWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
+              width: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              minWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              maxWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
@@ -194,16 +209,24 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
               backgroundColor: "transparent",
               border: "1px solid rgba(75,85,255,0.5)",
               borderRadius: "0",
-              padding: isMobile ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)" : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
+              padding: isMobile
+                ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
+                : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
               fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
               transition: "all 0.3s ease",
               whiteSpace: "nowrap",
               lineHeight: "1.2",
-              width: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              minWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              maxWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
+              width: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              minWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              maxWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
@@ -225,16 +248,24 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
               backgroundColor: "transparent",
               border: "1px solid rgba(75,85,255,0.5)",
               borderRadius: "0",
-              padding: isMobile ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)" : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
+              padding: isMobile
+                ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
+                : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
               fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
               transition: "all 0.3s ease",
               whiteSpace: "nowrap",
               lineHeight: "1.2",
-              width: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              minWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              maxWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
+              width: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              minWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              maxWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
@@ -256,16 +287,24 @@ export default function Navbar({ opacity = 1, isAnimating = false }: NavbarProps
               backgroundColor: "transparent",
               border: "1px solid rgba(75,85,255,0.5)",
               borderRadius: "0",
-              padding: isMobile ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)" : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
+              padding: isMobile
+                ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
+                : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
               color: "#fff",
               fontFamily: "Upheav, sans-serif",
               fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
               transition: "all 0.3s ease",
               whiteSpace: "nowrap",
               lineHeight: "1.2",
-              width: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              minWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
-              maxWidth: isMobile ? "clamp(60px, 18vw, 80px)" : "clamp(80px, 12vw, 120px)",
+              width: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              minWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
+              maxWidth: isMobile
+                ? "clamp(60px, 18vw, 80px)"
+                : "clamp(80px, 12vw, 120px)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
