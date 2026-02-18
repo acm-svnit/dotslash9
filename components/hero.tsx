@@ -16,6 +16,8 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
   const [heroBgReady, setHeroBgReady] = useState(false);
   const [lettersReady, setLettersReady] = useState(false);
   const [bgReady, setBgReady] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [showMobilePrompt, setShowMobilePrompt] = useState(false);
   const heroBgRef = useRef<HTMLElement>(null);
   const backgroundElementsRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<HTMLDivElement>(null);
@@ -29,12 +31,22 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setShowGame(false);
+        return;
+      }
+
+      const isSpace =
+        e.code === "Space" || e.key === " " || e.key.toLowerCase() === "spacebar";
+
+      if (isSpace && heroBgReady) {
+        e.preventDefault();
+        setShowGame(true);
+        setShowHint(false);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [heroBgReady]);
 
   useEffect(() => {
     if (backgroundElementsRef.current) {
@@ -93,21 +105,33 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
       ease: "power2.inOut",
       onComplete: () => {
         setHeroBgReady(true);
-        setShowGame(true);
-        
-        setTimeout(() => {
-          if (gameRef.current) {
-            gsap.set(gameRef.current, { opacity: 0 });
-            gsap.to(gameRef.current, {
-              opacity: 1,
-              duration: 2,
-              ease: "power2.inOut",
-            });
-          }
-        }, 50);
       },
     });
   }, [bgReady, externalBgReady]);
+
+  useEffect(() => {
+    if (!showGame || !heroBgReady || !gameRef.current) return;
+
+    gsap.set(gameRef.current, { opacity: 0 });
+    gsap.to(gameRef.current, {
+      opacity: 1,
+      duration: 2,
+      ease: "power2.inOut",
+    });
+  }, [showGame, heroBgReady]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!heroBgReady) return;
+
+    if (window.innerWidth >= 768) {
+      setShowHint(true);
+      setShowMobilePrompt(false);
+    } else {
+      setShowHint(false);
+      setShowMobilePrompt(true);
+    }
+  }, [heroBgReady]);
 
   return (
     <section
@@ -212,6 +236,58 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
           style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, zIndex: 4 }}>
           <Game onQuit={() => setShowGame(false)} onPauseChange={setIsGamePaused} />
         </div>
+      )}
+      {showHint && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "clamp(40px, 8vh, 80px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            padding: "8px 18px",
+            borderRadius: "999px",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            color: "#fff",
+            fontFamily: "Upheav, sans-serif",
+            fontSize: "clamp(12px, 1.4vw, 16px)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            zIndex: 5,
+            pointerEvents: "none",
+            textAlign: "center",
+          }}>
+          Press SPACE to play the game
+        </div>
+      )}
+      {showMobilePrompt && !showGame && (
+        <button
+          type="button"
+          style={{
+            position: "absolute",
+            bottom: "clamp(40px, 8vh, 80px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            padding: "10px 22px",
+            borderRadius: "999px",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            border: "1px solid rgba(255, 255, 255, 0.35)",
+            color: "#fff",
+            fontFamily: "Upheav, sans-serif",
+            fontSize: "clamp(12px, 3.2vw, 15px)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            zIndex: 6,
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            if (!heroBgReady) return;
+            setShowGame(true);
+            setShowMobilePrompt(false);
+          }}
+        >
+          Tap to play the game
+        </button>
       )}
       <div
         style={{
