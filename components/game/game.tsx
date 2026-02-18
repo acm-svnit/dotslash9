@@ -40,6 +40,9 @@ type Enemy = {
   top: number;
   isHit?: boolean;
   hitTime?: number;
+  hp: number;
+  maxHp: number;
+  lastHitTime?: number;
 };
 
 type Explosion = {
@@ -88,9 +91,9 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const explosionIdRef = useRef(0);
   const lastShotTimeRef = useRef(0);
   const enemySpawnAccumulatorRef = useRef(0);
-
-  const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(score);
+  const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -137,7 +140,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   useEffect(() => {
     if (gameOver && gameOverAudioRef.current && !effectsMuted) {
       gameOverAudioRef.current.currentTime = 0;
-      gameOverAudioRef.current.play().catch(() => {});
+      gameOverAudioRef.current.play().catch(() => { });
     }
   }, [gameOver, effectsMuted]);
 
@@ -150,7 +153,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     ) {
       warningPlayedRef.current = true;
       warningAudioRef.current.currentTime = 0;
-      warningAudioRef.current.play().catch(() => {});
+      warningAudioRef.current.play().catch(() => { });
     }
   }, [score, effectsMuted]);
 
@@ -179,6 +182,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const restartGame = () => {
     warningPlayedRef.current = false;
     setWarningText("");
+    scoreRef.current = 0;
     const { width } = viewportSize;
     const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
     const startX = width
@@ -216,7 +220,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     if (gameOver || isPaused) return;
     const now = performance.now();
 
-    const currentCooldown = score >= 100 ? 250 : BULLET_COOLDOWN_MS;
+    const currentScore = scoreRef.current;
+    const currentCooldown = currentScore >= 100 ? 250 : BULLET_COOLDOWN_MS;
 
     if (now - lastShotTimeRef.current < currentCooldown) return;
     lastShotTimeRef.current = now;
@@ -240,7 +245,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
     if (shootAudioRef.current && !effectsMuted) {
       shootAudioRef.current.currentTime = 0;
-      shootAudioRef.current.play().catch(() => {});
+      shootAudioRef.current.play().catch(() => { });
     }
   }, [gameOver, isPaused, score, spriteScale, effectsMuted]);
 
@@ -373,7 +378,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
       let playerDead = false;
 
       if (width && height) {
-        const scoreMultiplier = Math.min(score, 200);
+        const currentScore = scoreRef.current;
+        const scoreMultiplier = Math.min(currentScore, 200);
         const currentSpawnInterval = Math.max(
           ENEMY_SPAWN_INTERVAL - scoreMultiplier * 0.01,
           0.5
@@ -391,7 +397,11 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
             const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
             const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
             const x = Math.random() * Math.max(1, width - enemyScaledWidth);
-            enemies = [...enemies, { id, x, top: -enemyScaledHeight }];
+            const enemyMaxHp = Math.floor(currentScore / 100) + 1;
+            enemies = [
+              ...enemies,
+              { id, x, top: -enemyScaledHeight, hp: enemyMaxHp, maxHp: enemyMaxHp },
+            ];
           }
         }
 
@@ -416,6 +426,18 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               }
 
               return null;
+            }
+
+            // Sync HP if score threshold was just passed
+            const requiredMaxHp = Math.floor(currentScore / 100) + 1;
+            if (e.maxHp < requiredMaxHp) {
+              const hpDiff = requiredMaxHp - e.maxHp;
+              return {
+                ...e,
+                maxHp: requiredMaxHp,
+                hp: e.hp + hpDiff,
+                top: e.top + currentEnemySpeed * deltaSeconds,
+              };
             }
 
             return {
@@ -462,39 +484,51 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               bulletAlive[i] = false;
 
               const hitEnemy = enemies[j];
+              const newHp = hitEnemy.hp - 1;
 
-              const explosionX =
-                hitEnemy.x +
-                enemyScaledWidth / 2 -
-                (EXPLOSION_SIZE * spriteScale) / 2;
-              const explosionTop =
-                hitEnemy.top +
-                enemyScaledHeight / 2 -
-                (EXPLOSION_SIZE * spriteScale) / 2;
+              if (newHp <= 0) {
+                const explosionX =
+                  hitEnemy.x +
+                  enemyScaledWidth / 2 -
+                  (EXPLOSION_SIZE * spriteScale) / 2;
+                const explosionTop =
+                  hitEnemy.top +
+                  enemyScaledHeight / 2 -
+                  (EXPLOSION_SIZE * spriteScale) / 2;
 
-              const explosionId = explosionIdRef.current++;
-              const newExplosion: Explosion = {
-                id: explosionId,
-                x: explosionX,
-                top: explosionTop,
-                startTime: now,
-              };
+                const explosionId = explosionIdRef.current++;
+                const newExplosion: Explosion = {
+                  id: explosionId,
+                  x: explosionX,
+                  top: explosionTop,
+                  startTime: now,
+                };
 
-              explosionsRef.current = [...explosionsRef.current, newExplosion];
-              setExplosions([...explosionsRef.current]);
+                explosionsRef.current = [...explosionsRef.current, newExplosion];
+                setExplosions([...explosionsRef.current]);
 
-              enemies[j] = {
-                ...hitEnemy,
-                isHit: true,
-                hitTime: now,
-              };
-              enemyAlive[j] = true;
+                enemies[j] = {
+                  ...hitEnemy,
+                  hp: 0,
+                  isHit: true,
+                  hitTime: now,
+                };
+                setScore((prev) => {
+                  const next = prev + 1;
+                  scoreRef.current = next;
+                  return next;
+                });
 
-              setScore((prev) => prev + 1);
-
-              if (explosionAudioRef.current && !effectsMuted) {
-                explosionAudioRef.current.currentTime = 0;
-                explosionAudioRef.current.play().catch(() => {});
+                if (explosionAudioRef.current && !effectsMuted) {
+                  explosionAudioRef.current.currentTime = 0;
+                  explosionAudioRef.current.play().catch(() => { });
+                }
+              } else {
+                enemies[j] = {
+                  ...hitEnemy,
+                  hp: newHp,
+                  lastHitTime: now,
+                };
               }
 
               break;
@@ -560,9 +594,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
         <div
           className="absolute left-1/2 -translate-x-1/2 font-[Upheav] text-sm md:text-base text-center whitespace-nowrap z-10"
           style={{
-            bottom: `${
-              SHIP_BOTTOM_OFFSET + SHIP_FRAME_HEIGHT * spriteScale + 20
-            }px`,
+            bottom: `${SHIP_BOTTOM_OFFSET + SHIP_FRAME_HEIGHT * spriteScale + 20
+              }px`,
             animation: "flashRedOrange 0.5s ease-in-out infinite",
           }}>
           {warningText}
@@ -577,7 +610,15 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
       ))}
 
       {enemies.map((e) => (
-        <EnemySprite key={e.id} x={e.x} top={e.top} />
+        <EnemySprite
+          key={e.id}
+          x={e.x}
+          top={e.top}
+          hp={e.hp}
+          maxHp={e.maxHp}
+          isHit={e.isHit}
+          lastHitTime={e.lastHitTime}
+        />
       ))}
 
       {explosions.map((exp) => (
@@ -624,32 +665,26 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
         mounted &&
         createPortal(
           <div
-            className={`fixed top-0 left-0 w-screen h-screen bg-black/80 flex flex-col items-center justify-center ${
-              isMobile ? "p-4" : "p-0"
-            } box-border z-99999`}>
+            className={`fixed top-0 left-0 w-screen h-screen bg-black/80 flex flex-col items-center justify-center ${isMobile ? "p-4" : "p-0"
+              } box-border z-99999`}>
             <div
-              className={`bg-black border-2 border-white ${
-                isMobile ? "p-6 px-4" : "p-10"
-              } flex flex-col items-center ${
-                isMobile ? "gap-5" : "gap-[30px]"
-              } w-full max-w-[420px] box-border`}>
+              className={`bg-black border-2 border-white ${isMobile ? "p-6 px-4" : "p-10"
+                } flex flex-col items-center ${isMobile ? "gap-5" : "gap-[30px]"
+                } w-full max-w-[420px] box-border`}>
               <h2
-                className={`text-white font-[Upheav] ${
-                  isMobile ? "text-3xl" : "text-5xl"
-                } m-0 text-center`}>
+                className={`text-white font-[Upheav] ${isMobile ? "text-3xl" : "text-5xl"
+                  } m-0 text-center`}>
                 Game Over
               </h2>
               <div
-                className={`text-white font-[Upheav] ${
-                  isMobile ? "text-2xl" : "text-4xl"
-                } text-center`}>
+                className={`text-white font-[Upheav] ${isMobile ? "text-2xl" : "text-4xl"
+                  } text-center`}>
                 Score: {score}
               </div>
               <div className="flex flex-col gap-5 w-full">
                 <div
-                  className={`flex ${
-                    isMobile ? "flex-col gap-3" : "flex-row gap-5"
-                  } w-full`}>
+                  className={`flex ${isMobile ? "flex-col gap-3" : "flex-row gap-5"
+                    } w-full`}>
                   <button
                     onClick={restartGame}
                     className="px-6 py-3 bg-white/20 border-2 border-white text-white font-[Upheav] text-sm cursor-pointer transition-colors hover:bg-white/30 flex-1 w-full">
