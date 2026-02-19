@@ -15,6 +15,7 @@ type ExplosionSpriteProps = {
   top: number;
   fps?: number;
   onComplete?: () => void;
+  size?: number; // Optional size multiplier (defaults to 1)
 };
 
 export const ExplosionSprite: React.FC<ExplosionSpriteProps> = ({
@@ -22,6 +23,7 @@ export const ExplosionSprite: React.FC<ExplosionSpriteProps> = ({
   top,
   fps = 10,
   onComplete,
+  size = 1,
 }) => {
   const [frameIndex, setFrameIndex] = useState(0);
   const spriteScale = useSpriteScale();
@@ -54,18 +56,20 @@ export const ExplosionSprite: React.FC<ExplosionSpriteProps> = ({
   const backgroundPositionX = -column * EXPLOSION_SIZE;
   const backgroundPositionY = -row * EXPLOSION_SIZE;
 
+  const scaledSize = EXPLOSION_SIZE * size;
+
   return (
     <div
       style={{
         position: "absolute",
         left: x,
         top,
-        width: EXPLOSION_SIZE,
-        height: EXPLOSION_SIZE,
+        width: scaledSize,
+        height: scaledSize,
         backgroundImage: "url(/game/explosion.png)",
         backgroundRepeat: "no-repeat",
-        backgroundSize: `${spriteSheetWidth}px ${spriteSheetHeight}px`,
-        backgroundPosition: `${backgroundPositionX}px ${backgroundPositionY}px`,
+        backgroundSize: `${spriteSheetWidth * size}px ${spriteSheetHeight * size}px`,
+        backgroundPosition: `${backgroundPositionX * size}px ${backgroundPositionY * size}px`,
         imageRendering: "pixelated",
         transform: `scale(${spriteScale})`,
         transformOrigin: "top left",

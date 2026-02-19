@@ -244,20 +244,21 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
             bottom: "clamp(40px, 8vh, 80px)",
             left: "50%",
             transform: "translateX(-50%)",
-            padding: "8px 18px",
+            padding: "6px 14px",
             borderRadius: "999px",
             backgroundColor: "rgba(0, 0, 0, 0.6)",
-            border: "1px solid rgba(255, 255, 255, 0.3)",
+            border: "1px solid rgba(255, 255, 255, 0.35)",
             color: "#fff",
             fontFamily: "Upheav, sans-serif",
-            fontSize: "clamp(12px, 1.4vw, 16px)",
+            fontSize: "clamp(10px, 1.1vw, 13px)",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
+            textShadow: "0 0 6px rgba(0, 0, 0, 0.7)",
             zIndex: 5,
             pointerEvents: "none",
             textAlign: "center",
           }}>
-          Press SPACE to play the game
+          ✦ press space to start ✦
         </div>
       )}
       {showMobilePrompt && !showGame && (
@@ -268,13 +269,13 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
             bottom: "clamp(40px, 8vh, 80px)",
             left: "50%",
             transform: "translateX(-50%)",
-            padding: "10px 22px",
+            padding: "8px 18px",
             borderRadius: "999px",
             backgroundColor: "rgba(0, 0, 0, 0.7)",
             border: "1px solid rgba(255, 255, 255, 0.35)",
             color: "#fff",
             fontFamily: "Upheav, sans-serif",
-            fontSize: "clamp(12px, 3.2vw, 15px)",
+            fontSize: "clamp(11px, 3vw, 14px)",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             zIndex: 6,
@@ -286,7 +287,7 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
             setShowMobilePrompt(false);
           }}
         >
-          Tap to play the game
+          ✦ tap to start ✦
         </button>
       )}
       <div
