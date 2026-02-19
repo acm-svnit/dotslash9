@@ -8,20 +8,19 @@ import { ShipSprite, SHIP_FRAME_WIDTH, SHIP_FRAME_HEIGHT } from "./ship-sprite";
 import { BulletSprite, BULLET_SIZE } from "./bullet-sprite";
 import { EnemySprite, ENEMY_WIDTH, ENEMY_HEIGHT } from "./enemy-sprite";
 import { ExplosionSprite, EXPLOSION_SIZE } from "./explosion-sprite";
+import { BossSprite, BOSS_WIDTH, BOSS_HEIGHT } from "./boss-sprite";
 import { useSpriteScale } from "./use-sprite-scale";
 import { useAudio } from "@/contexts/audio-context";
+import { GAME_CONFIG } from "./game-config";
 
-const SHIP_BOTTOM_OFFSET = 80;
-
-const SHIP_ACCEL = 800;
-const SHIP_MAX_SPEED = 400;
-const SHIP_FRICTION = 900;
-
-const BULLET_SPEED = 600;
-const BULLET_COOLDOWN_MS = 100;
-
-const ENEMY_SPEED = 80;
-const ENEMY_SPAWN_INTERVAL = 1.5;
+const {
+  ship: SHIP_CONFIG,
+  bullet: BULLET_CONFIG,
+  enemy: ENEMY_CONFIG,
+  boss: BOSS_CONFIG,
+  progression: PROGRESSION_CONFIG,
+  warning: WARNING_CONFIG,
+} = GAME_CONFIG;
 
 type ShipState = {
   x: number;
@@ -50,6 +49,16 @@ type Explosion = {
   x: number;
   top: number;
   startTime: number;
+  size?: number; // Size multiplier for boss explosions
+};
+
+type Boss = {
+  x: number;
+  top: number;
+  hp: number;
+  maxHp: number;
+  isHit?: boolean;
+  lastHitTime?: number;
 };
 
 type GameProps = {
@@ -57,8 +66,7 @@ type GameProps = {
   onPauseChange?: (isPaused: boolean) => void;
 };
 
-const WARNING_MESSAGE =
-  "Your spaceship is breaking down! Cooldowns must be activated!";
+const WARNING_MESSAGE = WARNING_CONFIG.message;
 
 export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const spriteScale = useSpriteScale();
@@ -79,10 +87,12 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [explosions, setExplosions] = useState<Explosion[]>([]);
   const [warningText, setWarningText] = useState("");
+  const [boss, setBoss] = useState<Boss | null>(null);
 
   const bulletsRef = useRef<Bullet[]>([]);
   const enemiesRef = useRef<Enemy[]>([]);
   const explosionsRef = useRef<Explosion[]>([]);
+  const bossRef = useRef<Boss | null>(null);
 
   const keysRef = useRef({ left: false, right: false });
   const touchActiveRef = useRef(false);
@@ -95,6 +105,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const explosionIdRef = useRef(0);
   const lastShotTimeRef = useRef(0);
   const enemySpawnAccumulatorRef = useRef(0);
+  const enemiesSpawnedRef = useRef(0); // Track total enemies spawned
+  const bossSpawnedRef = useRef(false);
   const [score, setScore] = useState(0);
   const scoreRef = useRef(score);
   const [gameOver, setGameOver] = useState(false);
@@ -150,7 +162,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
   useEffect(() => {
     if (
-      score >= 100 &&
+      score >= PROGRESSION_CONFIG.warningThreshold &&
       !warningPlayedRef.current &&
       warningAudioRef.current &&
       !effectsMuted
@@ -162,7 +174,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   }, [score, effectsMuted]);
 
   useEffect(() => {
-    if (score < 100) {
+    if (score < PROGRESSION_CONFIG.warningThreshold) {
       setWarningText("");
       return;
     }
@@ -204,8 +216,10 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
     setBullets([]);
     setEnemies([]);
+    setBoss(null);
     bulletsRef.current = [];
     enemiesRef.current = [];
+    bossRef.current = null;
 
     bulletsRef.current = [];
     enemiesRef.current = [];
@@ -216,6 +230,8 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     explosionIdRef.current = 0;
     lastShotTimeRef.current = 0;
     enemySpawnAccumulatorRef.current = 0;
+    enemiesSpawnedRef.current = 0;
+    bossSpawnedRef.current = false;
 
     keysRef.current = { left: false, right: false };
   };
@@ -225,7 +241,10 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     const now = performance.now();
 
     const currentScore = scoreRef.current;
-    const currentCooldown = currentScore >= 100 ? 250 : BULLET_COOLDOWN_MS;
+    const currentCooldown =
+      currentScore >= PROGRESSION_CONFIG.warningThreshold
+        ? BULLET_CONFIG.cooldownAfterWarningMs
+        : BULLET_CONFIG.cooldownMs;
 
     if (now - lastShotTimeRef.current < currentCooldown) return;
     lastShotTimeRef.current = now;
@@ -238,7 +257,7 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     const id = bulletIdRef.current++;
     const bulletX = shipX + shipScaledWidth / 2 - bulletScaledSize / 2;
     const bulletBottom =
-      SHIP_BOTTOM_OFFSET + shipScaledHeight - bulletScaledSize / 2;
+      SHIP_CONFIG.bottomOffset + shipScaledHeight - bulletScaledSize / 2;
 
     const newBullets = [
       ...bulletsRef.current,
@@ -352,21 +371,21 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
         let { x, v } = prev;
 
         if (keysRef.current.left && !keysRef.current.right) {
-          v -= SHIP_ACCEL * deltaSeconds;
+          v -= SHIP_CONFIG.acceleration * deltaSeconds;
         } else if (keysRef.current.right && !keysRef.current.left) {
-          v += SHIP_ACCEL * deltaSeconds;
+          v += SHIP_CONFIG.acceleration * deltaSeconds;
         } else {
           if (v > 0) {
-            v -= SHIP_FRICTION * deltaSeconds;
+            v -= SHIP_CONFIG.friction * deltaSeconds;
             if (v < 0) v = 0;
           } else if (v < 0) {
-            v += SHIP_FRICTION * deltaSeconds;
+            v += SHIP_CONFIG.friction * deltaSeconds;
             if (v > 0) v = 0;
           }
         }
 
-        if (v > SHIP_MAX_SPEED) v = SHIP_MAX_SPEED;
-        if (v < -SHIP_MAX_SPEED) v = -SHIP_MAX_SPEED;
+        if (v > SHIP_CONFIG.maxSpeed) v = SHIP_CONFIG.maxSpeed;
+        if (v < -SHIP_CONFIG.maxSpeed) v = -SHIP_CONFIG.maxSpeed;
 
         x += v * deltaSeconds;
 
@@ -387,33 +406,51 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
       let bullets = bulletsRef.current;
       let enemies = enemiesRef.current;
+      let currentBoss = bossRef.current;
       let playerDead = false;
 
       if (width && height) {
         const currentScore = scoreRef.current;
         const scoreMultiplier = Math.min(currentScore, 200);
         const currentSpawnInterval = Math.max(
-          ENEMY_SPAWN_INTERVAL - scoreMultiplier * 0.01,
+          ENEMY_CONFIG.spawnInterval - scoreMultiplier * 0.01,
           0.5
         );
 
-        enemySpawnAccumulatorRef.current += deltaSeconds;
-        if (enemySpawnAccumulatorRef.current >= currentSpawnInterval) {
-          const spawns = Math.floor(
-            enemySpawnAccumulatorRef.current / currentSpawnInterval
-          );
-          enemySpawnAccumulatorRef.current -= spawns * currentSpawnInterval;
+        // Spawn enemies continuously, but pause spawning when boss is active
+        if (!bossSpawnedRef.current) {
+          enemySpawnAccumulatorRef.current += deltaSeconds;
+          if (enemySpawnAccumulatorRef.current >= currentSpawnInterval) {
+            const spawns = Math.floor(
+              enemySpawnAccumulatorRef.current / currentSpawnInterval
+            );
+            enemySpawnAccumulatorRef.current -= spawns * currentSpawnInterval;
 
-          for (let i = 0; i < spawns; i++) {
-            const id = enemyIdRef.current++;
-            const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
-            const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
-            const x = Math.random() * Math.max(1, width - enemyScaledWidth);
-            const enemyMaxHp = Math.floor(currentScore / 100) + 1;
-            enemies = [
-              ...enemies,
-              { id, x, top: -enemyScaledHeight, hp: enemyMaxHp, maxHp: enemyMaxHp },
-            ];
+            for (let i = 0; i < spawns; i++) {
+              enemiesSpawnedRef.current++;
+              const id = enemyIdRef.current++;
+              const enemyScaledWidth = ENEMY_WIDTH * spriteScale;
+              const enemyScaledHeight = ENEMY_HEIGHT * spriteScale;
+              const x = Math.random() * Math.max(1, width - enemyScaledWidth);
+              
+              // HP increases based on boss wave
+              const enemyMaxHp =
+                Math.floor(enemiesSpawnedRef.current / PROGRESSION_CONFIG.enemiesPerBossWave) *
+                  ENEMY_CONFIG.hpIncreasePerWave +
+                1;
+              
+              enemies = [
+                ...enemies,
+                {
+                  id,
+                  x,
+                  top: -enemyScaledHeight,
+                  hp: enemyMaxHp,
+                  maxHp: enemyMaxHp,
+                },
+              ];
+
+            }
           }
         }
 
@@ -421,13 +458,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
         bullets = bullets
           .map((b) => ({
             ...b,
-            bottom: b.bottom + BULLET_SPEED * deltaSeconds,
+            bottom: b.bottom + BULLET_CONFIG.speed * deltaSeconds,
           }))
           .filter((b) => b.bottom <= height + bulletScaledSize);
 
         const now = performance.now();
 
-        const currentEnemySpeed = ENEMY_SPEED + scoreMultiplier * 0.01;
+        const currentEnemySpeed = ENEMY_CONFIG.speed + scoreMultiplier * 0.01;
 
         enemies = enemies
           .map((e) => {
@@ -440,8 +477,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               return null;
             }
 
-            // Sync HP if score threshold was just passed
-            const requiredMaxHp = Math.floor(currentScore / 100) + 1;
+            // Sync HP based on current spawn count
+            const currentWave = Math.floor(
+              enemiesSpawnedRef.current /
+                PROGRESSION_CONFIG.enemiesPerBossWave
+            );
+            const requiredMaxHp =
+              currentWave * ENEMY_CONFIG.hpIncreasePerWave + 1;
             if (e.maxHp < requiredMaxHp) {
               const hpDiff = requiredMaxHp - e.maxHp;
               return {
@@ -525,9 +567,48 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
                   isHit: true,
                   hitTime: now,
                 };
+
                 setScore((prev) => {
                   const next = prev + 1;
                   scoreRef.current = next;
+
+                  // Spawn boss every N enemies killed (based on config)
+                  // Check if we've reached a boss spawn threshold
+                  if (
+                    next > 0 &&
+                    next % PROGRESSION_CONFIG.enemiesRequiredForBoss === 0 &&
+                    !bossSpawnedRef.current &&
+                    width > 0 &&
+                    height > 0
+                  ) {
+                    bossSpawnedRef.current = true;
+
+                    const bossScaledWidth = BOSS_WIDTH * spriteScale;
+                    const bossScaledHeight = BOSS_HEIGHT * spriteScale;
+                    const bossX = Math.max(0, width / 2 - bossScaledWidth / 2);
+                    const bossTop = -bossScaledHeight;
+
+                    // Boss HP increases based on wave number (how many bosses have been spawned)
+                    // bossWave = 1 at first threshold, 2 at second, etc.
+                    const bossWave = Math.floor(
+                      next / PROGRESSION_CONFIG.enemiesRequiredForBoss
+                    );
+                    // First wave gets base HP, each subsequent wave adds hpIncreasePerWave
+                    const bossHp =
+                      BOSS_CONFIG.hp +
+                      (bossWave - 1) * BOSS_CONFIG.hpIncreasePerWave;
+
+                    const initialBoss: Boss = {
+                      x: bossX,
+                      top: bossTop,
+                      hp: bossHp,
+                      maxHp: bossHp,
+                    };
+
+                    bossRef.current = initialBoss;
+                    setBoss(initialBoss);
+                  }
+
                   return next;
                 });
 
@@ -544,6 +625,77 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
               }
 
               break;
+            }
+          }
+          // Boss collision
+          if (bulletAlive[i] && currentBoss && !currentBoss.isHit) {
+            const bossScaledWidth = BOSS_WIDTH * spriteScale;
+            const bossScaledHeight = BOSS_HEIGHT * spriteScale;
+            const bossLeft = currentBoss.x;
+            const bossRight = currentBoss.x + bossScaledWidth;
+            const bossTopY = currentBoss.top;
+            const bossBottomY = currentBoss.top + bossScaledHeight;
+
+            const bossOverlap =
+              bulletLeft < bossRight &&
+              bulletRight > bossLeft &&
+              bulletTopY < bossBottomY &&
+              bulletBottomY > bossTopY;
+
+            if (bossOverlap) {
+              bulletAlive[i] = false;
+
+              const newHp = currentBoss.hp - 1;
+              if (newHp <= 0) {
+                // Boss defeated - use larger explosion
+                const bossExplosionSize = 3; // Boss explosion is 3x larger
+                const bossExplosionScaledSize = EXPLOSION_SIZE * bossExplosionSize * spriteScale;
+                const explosionX =
+                  currentBoss.x +
+                  bossScaledWidth / 2 -
+                  bossExplosionScaledSize / 2;
+                const explosionTop =
+                  currentBoss.top +
+                  bossScaledHeight / 2 -
+                  bossExplosionScaledSize / 2;
+
+                const explosionId = explosionIdRef.current++;
+                const newExplosion: Explosion = {
+                  id: explosionId,
+                  x: explosionX,
+                  top: explosionTop,
+                  startTime: now,
+                  size: bossExplosionSize,
+                };
+
+                explosionsRef.current = [...explosionsRef.current, newExplosion];
+                setExplosions([...explosionsRef.current]);
+
+                currentBoss = {
+                  ...currentBoss,
+                  hp: 0,
+                  isHit: true,
+                  lastHitTime: now,
+                };
+
+                // Simple reward: big score bonus for boss defeat.
+                setScore((prev) => {
+                  const next = prev + PROGRESSION_CONFIG.bossDefeatBonus;
+                  scoreRef.current = next;
+                  return next;
+                });
+
+                if (explosionAudioRef.current && !effectsMuted) {
+                  explosionAudioRef.current.currentTime = 0;
+                  explosionAudioRef.current.play().catch(() => { });
+                }
+              } else {
+                currentBoss = {
+                  ...currentBoss,
+                  hp: newHp,
+                  lastHitTime: now,
+                };
+              }
             }
           }
         }
@@ -578,12 +730,41 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
         const newBullets = bullets.filter((_, i) => bulletAlive[i]);
 
+        // Boss movement & lose condition
+        if (currentBoss && !currentBoss.isHit) {
+          const bossScaledHeight = BOSS_HEIGHT * spriteScale;
+          const bossSpeed =
+            ENEMY_CONFIG.speed * BOSS_CONFIG.speedMultiplier;
+          const nextTop = currentBoss.top + bossSpeed * deltaSeconds;
+
+          if (nextTop + bossScaledHeight >= height) {
+            playerDead = true;
+          } else {
+            currentBoss = {
+              ...currentBoss,
+              top: nextTop,
+            };
+          }
+        }
+
+        // Remove boss once its death animation time has passed
+        if (currentBoss && currentBoss.isHit) {
+          const timeSinceHit = (now - (currentBoss.lastHitTime ?? now)) / 1000;
+          if (timeSinceHit >= 0.5) {
+            currentBoss = null;
+            // Reset boss spawn flag so next boss can spawn after more enemies
+            bossSpawnedRef.current = false;
+          }
+        }
+
         enemiesRef.current = newEnemies;
         bulletsRef.current = newBullets;
         explosionsRef.current = newExplosions;
+        bossRef.current = currentBoss;
         setEnemies(newEnemies);
         setBullets(newBullets);
         setExplosions(newExplosions);
+        setBoss(currentBoss);
       }
 
       if (playerDead) {
@@ -620,6 +801,13 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
   const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
     if (!isMobile || gameOver || isPaused) return;
+    
+    // Don't handle ship movement if touch started on a button or control element
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="button"]')) {
+      return;
+    }
+    
     const touch = e.touches[0];
     if (!touch) return;
 
@@ -640,15 +828,22 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
     updateShipFromTouch(touch.clientX);
   };
 
-  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
+  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
     if (!isMobile) return;
+
+    // Don't handle tap-to-shoot if touch ended on a button (button handles its own shooting)
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('[role="button"]')) {
+      touchActiveRef.current = false;
+      return;
+    }
 
     const now = performance.now();
     const duration = now - touchStartTimeRef.current;
     const dx = lastTouchXRef.current - touchStartXRef.current;
 
-    // Short tap without much movement counts as a shoot action.
-    if (!gameOver && !isPaused && duration < 200 && Math.abs(dx) < 10) {
+    // Short tap without much movement counts as a shoot action (fallback method).
+    if (!gameOver && !isPaused && touchActiveRef.current && duration < 200 && Math.abs(dx) < 10) {
       handleShoot();
     }
 
@@ -663,13 +858,17 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
-      <ShipSprite x={ship.x} bottom={SHIP_BOTTOM_OFFSET} fps={12} />
+      <ShipSprite
+        x={ship.x}
+        bottom={SHIP_CONFIG.bottomOffset}
+        fps={12}
+      />
 
-      {score >= 100 && warningText && (
+      {score >= PROGRESSION_CONFIG.warningThreshold && warningText && (
         <div
           className="absolute left-1/2 -translate-x-1/2 font-[Upheav] text-sm md:text-base text-center whitespace-nowrap z-10"
           style={{
-            bottom: `${SHIP_BOTTOM_OFFSET + SHIP_FRAME_HEIGHT * spriteScale + 20
+            bottom: `${SHIP_CONFIG.bottomOffset + SHIP_FRAME_HEIGHT * spriteScale + 20
               }px`,
             animation: "flashRedOrange 0.5s ease-in-out infinite",
           }}>
@@ -697,8 +896,24 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
       ))}
 
       {explosions.map((exp) => (
-        <ExplosionSprite key={exp.id} x={exp.x} top={exp.top} />
+        <ExplosionSprite
+          key={exp.id}
+          x={exp.x}
+          top={exp.top}
+          size={exp.size}
+        />
       ))}
+
+      {boss && (
+        <BossSprite
+          x={boss.x}
+          top={boss.top}
+          hp={boss.hp}
+          maxHp={boss.maxHp}
+          isHit={boss.isHit}
+          lastHitTime={boss.lastHitTime}
+        />
+      )}
 
       <Controls
         isMobile={isMobile}

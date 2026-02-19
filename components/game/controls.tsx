@@ -30,10 +30,31 @@ export const Controls: React.FC<ControlsProps> = ({
   return (
     <>
       {isMobile && (
-        <div className="absolute bottom-5 left-5 flex flex-col items-start gap-2.5 z-1000"></div>
+        <>
+          {/* Shoot button - positioned on right side for easy thumb access */}
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!gameOver && !isPaused) {
+                onShoot();
+              }
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!gameOver && !isPaused) {
+                onShoot();
+              }
+            }}
+            disabled={gameOver || isPaused}
+            className="absolute bottom-5 right-5 w-16 h-16 bg-white/25 border-2 border-white/60 text-white font-[Upheav] text-xs cursor-pointer [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)] transition-all hover:bg-white/35 active:bg-white/40 active:scale-95 [image-rendering:pixelated] select-none touch-manipulation rounded-full flex items-center justify-center z-1000 disabled:opacity-50 disabled:cursor-not-allowed">
+            FIRE
+          </button>
+        </>
       )}
 
-      <div className="absolute bottom-5 right-5 flex flex-col items-end gap-2.5 z-1000">
+      <div className={`absolute bottom-5 ${isMobile ? "right-24" : "right-5"} flex flex-col items-end gap-2.5 z-1000`}>
         <div className="text-white text-xs font-[Upheav] [text-shadow:2px_2px_4px_rgba(0,0,0,0.8)]">
           Score: {score}
         </div>
