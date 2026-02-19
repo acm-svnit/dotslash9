@@ -9,6 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import DevfolioApplyButton from "./apply-button";
 
 const cardData = [
   {
@@ -186,6 +187,9 @@ export default function AboutSection() {
           >
             21 - 22 March 2026
           </p>
+          <div className="w-full flex justify-center">
+            <DevfolioApplyButton />
+          </div>
           <p
             style={{
               color: "rgba(255, 255, 255, 0.7)",
