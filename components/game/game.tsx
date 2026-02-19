@@ -85,6 +85,10 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
   const explosionsRef = useRef<Explosion[]>([]);
 
   const keysRef = useRef({ left: false, right: false });
+  const touchActiveRef = useRef(false);
+  const touchStartXRef = useRef(0);
+  const lastTouchXRef = useRef(0);
+  const touchStartTimeRef = useRef(0);
 
   const bulletIdRef = useRef(0);
   const enemyIdRef = useRef(0);
@@ -337,6 +341,14 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
       setShip((prev) => {
         if (!width) return prev;
+
+        // When actively dragging on mobile, ship position is controlled by touch handlers.
+        if (isMobile && touchActiveRef.current) {
+          const next = { ...prev, v: 0 };
+          shipRef.current = next;
+          return next;
+        }
+
         let { x, v } = prev;
 
         if (keysRef.current.left && !keysRef.current.right) {
@@ -584,10 +596,73 @@ export const Game: React.FC<GameProps> = ({ onQuit }) => {
 
     animationFrameId = window.requestAnimationFrame(loop);
     return () => window.cancelAnimationFrame(animationFrameId);
-  }, [viewportSize, gameOver, spriteScale, isPaused]);
+  }, [viewportSize, gameOver, spriteScale, isPaused, isMobile]);
+
+  const updateShipFromTouch = useCallback(
+    (clientX: number) => {
+      const { width } = viewportSize;
+      if (!width) return;
+
+      const shipScaledWidth = SHIP_FRAME_WIDTH * spriteScale;
+      let x = clientX - shipScaledWidth / 2;
+      const maxX = Math.max(0, width - shipScaledWidth);
+      if (x < 0) x = 0;
+      if (x > maxX) x = maxX;
+
+      setShip((prev) => {
+        const next = { x, v: 0 };
+        shipRef.current = next;
+        return next;
+      });
+    },
+    [viewportSize, spriteScale]
+  );
+
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
+    if (!isMobile || gameOver || isPaused) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+
+    touchActiveRef.current = true;
+    touchStartTimeRef.current = performance.now();
+    touchStartXRef.current = touch.clientX;
+    lastTouchXRef.current = touch.clientX;
+
+    updateShipFromTouch(touch.clientX);
+  };
+
+  const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => {
+    if (!isMobile || gameOver || isPaused || !touchActiveRef.current) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+
+    lastTouchXRef.current = touch.clientX;
+    updateShipFromTouch(touch.clientX);
+  };
+
+  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
+    if (!isMobile) return;
+
+    const now = performance.now();
+    const duration = now - touchStartTimeRef.current;
+    const dx = lastTouchXRef.current - touchStartXRef.current;
+
+    // Short tap without much movement counts as a shoot action.
+    if (!gameOver && !isPaused && duration < 200 && Math.abs(dx) < 10) {
+      handleShoot();
+    }
+
+    touchActiveRef.current = false;
+  };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div
+      className="relative w-full h-screen overflow-hidden touch-none"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
+    >
       <ShipSprite x={ship.x} bottom={SHIP_BOTTOM_OFFSET} fps={12} />
 
       {score >= 100 && warningText && (
