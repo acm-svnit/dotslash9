@@ -39,6 +39,60 @@ Learn Internals: Understand how complex systems work under the hood.
 
 Career Growth: Practice debugging, refactoring, and writing clean code just like senior engineers.`,
     },
+    {
+        name: "Vercel",
+        logo: "/sponsors/vercel.png",
+        tier: "In-Kind",
+        description: `## About Vercel
+
+Vercel is the platform for frontend developers, providing the speed and reliability innovators need to create at the moment of inspiration.
+
+"Develop. Preview. Ship."
+
+Why Vercel?
+
+Instant Deployments: Push your code and see it live in seconds with automatic CI/CD.
+
+Edge Network: Deliver content at blazing speed with a globally distributed edge network.
+
+Framework Agnostic: First-class support for Next.js, and works seamlessly with any frontend framework.`,
+    },
+    {
+        name: "Windsurf",
+        logo: "/sponsors/windsurf.png",
+        tier: "In-Kind",
+        description: `## About Windsurf
+
+Windsurf is an AI-powered IDE that keeps developers in flow. Built for speed, intelligence, and deep codebase understanding.
+
+"The first agentic IDE."
+
+Why Windsurf?
+
+AI Flows: Combines copilot and agentic AI for a seamless coding experience.
+
+Deep Context Awareness: Understands your entire codebase to provide relevant suggestions.
+
+Developer Productivity: Accelerate your workflow with intelligent code generation, refactoring, and debugging.`,
+    },
+    {
+        name: "ElevenLabs",
+        logo: "/sponsors/elevenlabs.png",
+        tier: "In-Kind",
+        description: `## About ElevenLabs
+
+ElevenLabs is a leading AI audio platform that creates the most realistic, versatile, and contextually-aware AI voices.
+
+"The most realistic AI voice platform."
+
+Why ElevenLabs?
+
+Voice Cloning: Create a digital twin of any voice with just minutes of audio.
+
+Multilingual Support: Generate speech in 29+ languages with natural-sounding accents.
+
+API & Developer Tools: Integrate high-quality text-to-speech into your applications with a powerful API.`,
+    },
 ];
 
 export default function CurrentSponsors() {
@@ -185,7 +239,7 @@ export default function CurrentSponsors() {
                                 </motion.div>
                             </DialogTrigger>
 
-                            <DialogContent className="bg-[#0a0514] border-[#392e4e] text-white max-w-2xl max-h-[85vh] overflow-y-auto">
+                            <DialogContent className="bg-[#0a0514] border-[#392e4e] text-white max-w-4xl max-h-[60vh] overflow-y-auto">
                                 <DialogHeader className="mb-6">
                                     <div className="flex flex-col items-center gap-4 text-center">
                                         <div className="w-full h-32 flex items-center justify-center p-4">
