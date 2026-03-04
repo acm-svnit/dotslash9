@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/preloader";
 import { AudioProvider } from "@/contexts/audio-context";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -117,6 +118,7 @@ export default function RootLayout({
             {children}
           </Preloader>
         </AudioProvider>
+        <Analytics />
       </body>
     </html>
   );
