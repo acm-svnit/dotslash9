@@ -93,6 +93,34 @@ Multilingual Support: Generate speech in 29+ languages with natural-sounding acc
 
 API & Developer Tools: Integrate high-quality text-to-speech into your applications with a powerful API.`,
     },
+    {
+        name: "Rovo",
+        logo: "/sponsors/rovo.png",
+        tier: "In-Kind",
+        description: `## About Rovo
+
+Rovo helps teams unlock knowledge and context across tools with an AI-native workspace.
+
+Why Rovo?
+
+Unified Search: Find information across code, docs, and tools from a single interface.
+
+AI Assistance: Use intelligent agents to accelerate workflows and decision making.`,
+    },
+    {
+        name: ".xyz",
+        logo: "/sponsors/xyz.png",
+        tier: "In-Kind",
+        description: `## About .xyz
+
+.xyz is a modern and flexible domain extension used by startups, creators, and developers worldwide.
+
+Why .xyz?
+
+Memorable Domains: Short, brandable names for projects and products.
+
+Developer Friendly: Popular TLD choice across web3, startups, and tech communities.`,
+    },
 ];
 
 export default function CurrentSponsors() {
