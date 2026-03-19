@@ -11,6 +11,7 @@ import CurrentSponsors from "@/components/current-sponsors";
 import ThemesSection from "@/components/themes-section";
 import VideosSection from "@/components/videos-section";
 import Navbar from "@/components/navbar";
+import Timer from "@/components/timer";
 
 export default function HomePage() {
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -48,6 +49,7 @@ export default function HomePage() {
           setTimeout(() => setNavbarVisible(true), 100);
         }}
       />
+      <Timer />
       <AboutSection />
       <ThemesSection />
       <AlphaSponsorSection />
