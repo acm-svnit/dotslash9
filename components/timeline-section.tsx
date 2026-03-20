@@ -1,6 +1,41 @@
 "use client";
 
 export default function TimelineSection() {
+  const days = [
+    {
+      dateLabel: "21st March",
+      events: [
+        { time: "8:00 AM – 9:00 AM", title: "Reporting & Breakfast" },
+        { time: "9:30 AM", title: "Hacking Begins" },
+        {
+          time: "11:00 AM – 12:00 PM",
+          title:
+            "Mentor Round 1 (Ideation Round)"
+        },
+        { time: "12:30 PM – 1:30 PM", title: "Lunch" },
+        { time: "3:30 PM – 4:00 PM", title: "Surprise Activity" },
+        { time: "4:00 PM – 5:00 PM", title: "Mentor Round 2" },
+        { time: "4:30 PM – 5:00 PM", title: "High Tea" },
+        { time: "7:30 PM – 8:30 PM", title: "Dinner" },
+        { time: "11:00 PM – 12:00 AM", title: "Mentor Round 3" },
+      ],
+    },
+    {
+      dateLabel: "22nd March",
+      events: [
+        { time: "1:30 AM – 2:00 AM", title: "High Tea" },
+        { time: "7:30 AM – 8:30 AM", title: "Breakfast" },
+        { time: "10:00 AM – 11:30 AM", title: "Final Mentor Round" },
+        { time: "12:00 PM", title: "Hacking Ends" },
+        { time: "1:00 PM", title: "Devfolio Submission Deadline" },
+        { time: "1:30 PM – 2:00 PM", title: "Lunch" },
+        { time: "2:00 PM", title: "Top 8 Teams Announced" },
+        { time: "2:30 PM – 4:30 PM", title: "Final Presentations" },
+        { time: "5:00 PM", title: "Prize Distribution & Closing Ceremony" },
+      ],
+    },
+  ];
+
   return (
     <section
       style={{
@@ -76,7 +111,7 @@ export default function TimelineSection() {
             color: "#fff",
             textShadow: "4px 4px 10px rgba(0, 0, 0, 0.7)",
           }}>
-          Timeline
+          DotSlash Hackathon
         </h2>
         <p
           style={{
@@ -86,7 +121,7 @@ export default function TimelineSection() {
             textShadow: "0 0 16px rgba(75,85,255,0.45)",
             letterSpacing: "0.04em",
           }}>
-          Will be announced soon
+          Schedule
         </p>
         <p
           style={{
@@ -96,9 +131,65 @@ export default function TimelineSection() {
             lineHeight: 1.6,
             fontFamily: "var(--font-sans)",
           }}>
-          Stay tuned for the full schedule. We are preparing a stellar
-          experience that aligns with our cosmic theme.
+          21st–22nd March timelines for reporting, hacking, mentor rounds, and final presentations.
         </p>
+
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 820,
+            marginTop: 22,
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            gap: 22,
+          }}>
+          {days.map((day) => (
+            <div key={day.dateLabel}>
+              <div
+                style={{
+                  color: "rgba(165, 180, 252, 1)",
+                  fontFamily: "Upheav, sans-serif",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  marginBottom: 10,
+                  fontSize: 14,
+                }}>
+                {day.dateLabel}
+              </div>
+
+              <div
+                style={{
+                  borderLeft: "2px solid rgba(75,85,255,0.45)",
+                  paddingLeft: 16,
+                }}>
+                {day.events.map((ev, idx) => (
+                  <div key={`${day.dateLabel}-${idx}`} style={{ marginBottom: 14 }}>
+                    <div
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Upheav, sans-serif",
+                        fontSize: 13,
+                        opacity: 0.92,
+                        marginBottom: 4,
+                      }}>
+                      {ev.time}
+                    </div>
+                    <div
+                      style={{
+                        color: "rgba(255,255,255,0.82)",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: 15,
+                        lineHeight: 1.45,
+                      }}>
+                      {ev.title}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div
         style={{
