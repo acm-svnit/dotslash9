@@ -55,25 +55,25 @@ const tbaTracks: Track[] = [
     key: "greentech",
     title: "TBA",
     cardDescription: "Coming soon...",
-    color: "#FF4B55",
-    gradient:
-      "linear-gradient(135deg, rgba(255,75,85,0.2) 0%, rgba(255,75,85,0.05) 100%)",
-  },
-  {
-    key: "civictech",
-    title: "TBA",
-    cardDescription: "Coming soon...",
     color: "#55FF4B",
     gradient:
       "linear-gradient(135deg, rgba(85,255,75,0.2) 0%, rgba(85,255,75,0.05) 100%)",
   },
   {
-    key: "web3",
+    key: "civictech",
     title: "TBA",
     cardDescription: "Coming soon...",
     color: "#FFB84B",
     gradient:
       "linear-gradient(135deg, rgba(255,184,75,0.2) 0%, rgba(255,184,75,0.05) 100%)",
+  },
+  {
+    key: "web3",
+    title: "TBA",
+    cardDescription: "Coming soon...",
+    color: "#FF4B55",
+    gradient:
+      "linear-gradient(135deg, rgba(255,75,85,0.2) 0%, rgba(255,75,85,0.05) 100%)",
   },
 ];
 
@@ -121,6 +121,11 @@ export default function ThemesSection() {
     "description",
   );
 
+  const PROBLEM_STATEMENTS_STORAGE_KEY = "dotslash_problem_statements_activated";
+  const ACTIVATION_CHANGED_EVENT = "dotslash_problem_statements_activation_changed";
+  const [areProblemStatementsActivated, setAreProblemStatementsActivated] =
+    useState(false);
+
   const schedule = useMemo(() => getHackathonWindowUtcMs(), []);
 
   useEffect(() => {
@@ -130,8 +135,53 @@ export default function ThemesSection() {
     return () => window.clearInterval(id);
   }, []);
 
-  const isLive = nowMs >= schedule.startUtcMs && nowMs <= schedule.endUtcMs;
-  const tracksToRender = isLive ? liveTracks : tbaTracks;
+  // Only show real track names after the user activates the problem statements
+  // on `/acmsvnitdotslash`. Otherwise, keep the cards as TBA.
+  const tracksToRender = areProblemStatementsActivated ? liveTracks : tbaTracks;
+
+  // Tracks are only visible after the user activates the problem statements on
+  // the `/acmsvnitdotslash` page. No database required (localStorage only).
+  // Also sync across pages instantly (custom event) and across tabs (storage event).
+  useEffect(() => {
+    const syncFromStorage = () => {
+      try {
+        setAreProblemStatementsActivated(
+          localStorage.getItem(PROBLEM_STATEMENTS_STORAGE_KEY) === "true",
+        );
+      } catch {
+        setAreProblemStatementsActivated(false);
+      }
+    };
+
+    syncFromStorage();
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== PROBLEM_STATEMENTS_STORAGE_KEY) return;
+      syncFromStorage();
+    };
+
+    const onActivationChanged = () => {
+      syncFromStorage();
+    };
+
+    window.addEventListener("storage", onStorage);
+    window.addEventListener(ACTIVATION_CHANGED_EVENT, onActivationChanged);
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(
+        ACTIVATION_CHANGED_EVENT,
+        onActivationChanged,
+      );
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!areProblemStatementsActivated) {
+      setDialogOpen(false);
+      setSelectedTrackKey(null);
+    }
+  }, [areProblemStatementsActivated]);
 
   const selectedTrackTitle =
     selectedTrackKey === null
@@ -221,6 +271,8 @@ export default function ThemesSection() {
   const trackAccentRgba = `rgba(${trackAccentRgb.r}, ${trackAccentRgb.g}, ${trackAccentRgb.b}, 0.45)`;
   const trackAccentRgbaSoft = `rgba(${trackAccentRgb.r}, ${trackAccentRgb.g}, ${trackAccentRgb.b}, 0.22)`;
 
+  const pdfHref = "/acmsvnitdotslash/problem-statements.pdf";
+
   return (
     <>
       <section
@@ -297,10 +349,44 @@ export default function ThemesSection() {
           }}>
           Tracks
         </h2>
-        <div
-          className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-          {tracksToRender.map((track, index) => (
-            <Card
+
+        <>
+            {areProblemStatementsActivated && (
+              <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: 18,
+              }}
+              >
+              <a
+                href={pdfHref}
+                download
+                style={{
+                  color: "#fff",
+                  fontFamily: "Upheav, sans-serif",
+                  textDecoration: "none",
+                  border: "1px solid rgba(75,85,255,0.55)",
+                  borderRadius: 999,
+                  padding: "10px 16px",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  boxShadow: "0 0 30px rgba(75,85,255,0.08)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  fontSize: 12,
+                  cursor: "pointer",
+                }}
+              >
+                Download Problem Statements (PDF)
+              </a>
+              </div>
+            )}
+
+            <div
+              className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+              {tracksToRender.map((track, index) => (
+                <Card
               key={index}
               className="bg-[#060010] border-[#392e4e] text-white overflow-hidden flex flex-col relative group"
               style={{
@@ -311,7 +397,7 @@ export default function ThemesSection() {
                 width: "100%",
                 transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 borderColor: track.color + "40",
-                cursor: isLive ? "pointer" : "default",
+                cursor: areProblemStatementsActivated ? "pointer" : "default",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = track.color;
@@ -324,7 +410,7 @@ export default function ThemesSection() {
                 e.currentTarget.style.boxShadow = "none";
               }}
               onClick={() => {
-                if (!isLive) return;
+                if (!areProblemStatementsActivated) return;
                 setSelectedTrackKey(track.key);
                 setDialogOpen(true);
               }}
@@ -496,9 +582,10 @@ export default function ThemesSection() {
                   {track.cardDescription}
                 </p>
               </CardContent>
-            </Card>
-          ))}
-        </div>
+                </Card>
+              ))}
+            </div>
+          </>
       </div>
       <div
         style={{
