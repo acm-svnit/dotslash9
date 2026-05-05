@@ -31,6 +31,27 @@ const cardData = [
   },
 ];
 
+const prizeData = [
+  {
+    title: "Second Prize",
+    amount: "30,000",
+    asset: "/2.png",
+    containerClassName: "md:mt-0",
+  },
+  {
+    title: "First Prize",
+    amount: "50,000",
+    asset: "/1.png",
+    containerClassName: "md:mt-0",
+  },
+  {
+    title: "Third Prize",
+    amount: "20,000",
+    asset: "/3.png",
+    containerClassName: "md:mt-0",
+  },
+];
+
 export default function AboutSection() {
   return (
     <section
@@ -250,99 +271,69 @@ export default function AboutSection() {
           >
             Prizes
           </h3>
-          <img
-            src="/1.png"
-            alt=""
-            aria-hidden
-            className="trophy-float-left"
-            style={{
-              position: "absolute",
-              left: "0",
-              top: "50%",
-              width: "clamp(80px, 12vw, 180px)",
-              height: "clamp(80px, 12vw, 180px)",
-              objectFit: "contain",
-              pointerEvents: "none",
-              zIndex: 5,
-              opacity: 0.9,
-            }}
-          />
-          <img
-            src="/3.png"
-            alt=""
-            aria-hidden
-            className="trophy-float-right"
-            style={{
-              position: "absolute",
-              right: "0",
-              top: "50%",
-              width: "clamp(80px, 12vw, 180px)",
-              height: "clamp(80px, 12vw, 180px)",
-              objectFit: "contain",
-              pointerEvents: "none",
-              zIndex: 5,
-              opacity: 0.9,
-            }}
-          />
-          <div className="w-full max-w-xl mx-auto relative z-10">
-            <div
-              style={{
-                backgroundColor: "#060010",
-                border: "1px solid #392e4e",
-                borderRadius: "16px",
-                padding: "clamp(32px, 5vw, 56px)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 30px rgba(75,85,255,0.5)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#392e4e";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            >
-              <p
+          <div className="w-full max-w-5xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5 px-4">
+            {prizeData.map((prize) => (
+              <div
+                key={prize.title}
+                className={prize.containerClassName}
                 style={{
-                  color: "rgba(75,85,255,0.95)",
-                  fontSize: "clamp(16px, 2.2vw, 22px)",
-                  fontFamily: "var(--font-sans)",
-                  fontWeight: "600",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  marginBottom: "10px",
+                  backgroundColor: "#060010",
+                  border: "1px solid #392e4e",
+                  borderRadius: "16px",
+                  padding: "clamp(24px, 3.5vw, 36px)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 30px rgba(75,85,255,0.5)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "#392e4e";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                Win big
-              </p>
-              <h4
-                style={{
-                  fontFamily: "Upheav, sans-serif",
-                  fontSize: "clamp(36px, 6.5vw, 64px)",
-                  color: "#fff",
-                  marginBottom: "8px",
-                  lineHeight: "1.1",
-                }}
-              >
-                1 Lakh+
-              </h4>
-              <p
-                style={{
-                  color: "rgba(255, 255, 255, 0.85)",
-                  fontSize: "clamp(17px, 2.5vw, 24px)",
-                  fontFamily: "var(--font-sans)",
-                  fontWeight: "500",
-                }}
-              >
-                worth of prizes up for grabs
-              </p>
-            </div>
+                <img
+                  src={prize.asset}
+                  alt={prize.title}
+                  style={{
+                    width: "clamp(72px, 9vw, 120px)",
+                    height: "clamp(72px, 9vw, 120px)",
+                    objectFit: "contain",
+                    marginBottom: "14px",
+                  }}
+                />
+                <p
+                  style={{
+                    color: "rgba(75,85,255,0.95)",
+                    fontSize: "clamp(14px, 1.8vw, 18px)",
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {prize.title}
+                </p>
+                <h4
+                  style={{
+                    fontFamily: "Upheav, sans-serif",
+                    fontSize: "clamp(30px, 4.6vw, 46px)",
+                    color: "#fff",
+                    marginBottom: "2px",
+                    lineHeight: "1.1",
+                  }}
+                >
+                  {prize.amount}
+                </h4>
+              </div>
+            ))}
           </div>
         </div>
       </div>
