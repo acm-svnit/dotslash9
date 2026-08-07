@@ -24,7 +24,7 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
   const titleRef = useRef<HTMLHeadingElement>(null);
   const lettersRef = useRef<HTMLSpanElement[]>([]);
 
-  const text = "DOTSLASH 9.0";
+  const text = "DOTSLASH 10.0";
   const letters = text.split("");
 
   useEffect(() => {

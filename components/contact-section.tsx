@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Mail, Instagram, Linkedin, MapPin } from "lucide-react";
+import { Mail, Instagram, Linkedin, MapPin, Globe } from "lucide-react";
 
 export default function ContactSection() {
   return (
@@ -124,6 +124,25 @@ export default function ContactSection() {
               Get in Touch
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <a
+                href="https://acmnitsurat.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  color: "rgba(255, 255, 255, 0.7)",
+                  textDecoration: "none",
+                  fontSize: "clamp(14px, 2vw, 18px)",
+                  fontFamily: "var(--font-sans)",
+                  transition: "color 0.3s ease",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255, 255, 255, 0.7)")}>
+                <Globe size={20} />
+                <span>acmnitsurat.in</span>
+              </a>
               <a
                 href="mailto:contact@dotslash.in"
                 style={{

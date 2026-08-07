@@ -1,8 +1,8 @@
-export const DOTSLASH_GLOBAL_DIALOG_TEXT = `DotSlash 9.0
+export const DOTSLASH_GLOBAL_DIALOG_TEXT = `DotSlash 10.0
 
 Problem Statements
 Hackathon Participation Rules
-The following rules apply to all shortlisted teams participating in DotSlash 9.0.
+The following rules apply to all shortlisted teams participating in DotSlash 10.0.
 These rules govern participant behaviour, development during the hackathon,
 and general conduct throughout the event. All participants are expected to
 follow these instructions at all times.

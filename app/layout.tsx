@@ -19,11 +19,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Dotslash 9.0 - Hackathon",
-    template: "%s | Dotslash 9.0",
+    default: "Dotslash 10.0 - Hackathon",
+    template: "%s | Dotslash 10.0",
   },
   description:
-    "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
+    "Dotslash 10.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
   icons: {
     icon: "/dotslash.png",
     shortcut: "/dotslash.png",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   keywords: [
     "Dotslash",
-    "Dotslash 9.0",
+    "Dotslash 10.0",
     "hackathon",
     "coding competition",
     "developer event",
@@ -44,10 +44,10 @@ export const metadata: Metadata = {
   publisher: "Dotslash",
 
   openGraph: {
-    title: "Dotslash 9.0 - Hackathon",
+    title: "Dotslash 10.0 - Hackathon",
     description:
-      "Join Dotslash 9.0, a high-energy hackathon where developers, designers, and innovators build the future together.",
-    siteName: "Dotslash 9.0",
+      "Join Dotslash 10.0, a high-energy hackathon where developers, designers, and innovators build the future together.",
+    siteName: "Dotslash 10.0",
     type: "website",
     locale: "en_US",
     images: [
@@ -55,16 +55,16 @@ export const metadata: Metadata = {
         url: "/dotslash.png",
         width: 1200,
         height: 630,
-        alt: "Dotslash 9.0",
+        alt: "Dotslash 10.0",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Dotslash 9.0 - Hackathon",
+    title: "Dotslash 10.0 - Hackathon",
     description:
-      "Build, ship, and innovate at Dotslash 9.0 - a hackathon for developers, designers, and makers.",
+      "Build, ship, and innovate at Dotslash 10.0 - a hackathon for developers, designers, and makers.",
     images: ["/dotslash.png"],
   },
 
@@ -92,11 +92,11 @@ export default function RootLayout({
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Dotslash 9.0",
+    name: "Dotslash 10.0",
     url: siteUrl,
     logo: `${siteUrl}/dotslash.png`,
     description:
-      "Dotslash 9.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
+      "Dotslash 10.0 is a premier hackathon and tech event bringing builders, designers, and innovators together for 30 hours of creation, collaboration, and impact.",
   };
 
   return (

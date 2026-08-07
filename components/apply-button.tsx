@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 
-const HACKATHON_SLUG = "dotslash-9";
-const DEVFOLIO_OVERVIEW_URL = "https://dotslash-9.devfolio.co/overview";
+const HACKATHON_SLUG = "dotslash-10";
+const DEVFOLIO_OVERVIEW_URL = "https://dotslash-10.devfolio.co/overview";
 
 const WRAPPER_SIZE = { height: "44px", width: "312px" };
 

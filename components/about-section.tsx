@@ -182,7 +182,7 @@ export default function AboutSection() {
               marginBottom: "clamp(1px, 0.2vh, 3px)",
             }}
           >
-            DOTSLASH 9.0
+            DOTSLASH 10.0
           </h3>
           <h4
             style={{
@@ -205,7 +205,7 @@ export default function AboutSection() {
               letterSpacing: "0.04em",
             }}
           >
-            21 - 22 March 2026
+            21 - 22 March 2027
           </p>
           <p
             style={{
@@ -217,7 +217,7 @@ export default function AboutSection() {
             }}
             className="text-white/70 text-xs leading-tight font-sans"
           >
-            DotSlash 9.0 is a 30-hour, in-person hackathon hosted at SVNIT's
+            DotSlash 10.0 is a 30-hour, in-person hackathon hosted at SVNIT's
             beautiful campus. It's organized entirely by SVNIT students and
             provides a unique opportunity for developers worldwide to come
             together and use their skills to create useful innovations for

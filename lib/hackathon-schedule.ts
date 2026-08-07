@@ -60,7 +60,7 @@ function zonedTimeToUtcMs(zdt: ZonedDateTime, timeZone: string) {
 
 export function getHackathonWindowUtcMs(timeZone = DEFAULT_TIME_ZONE) {
   const start: ZonedDateTime = {
-    year: 2026,
+    year: 2027,
     month: 3,
     day: 21,
     hour: 10,
@@ -69,7 +69,7 @@ export function getHackathonWindowUtcMs(timeZone = DEFAULT_TIME_ZONE) {
   };
 
   const end: ZonedDateTime = {
-    year: 2026,
+    year: 2027,
     month: 3,
     day: 22,
     hour: 10,

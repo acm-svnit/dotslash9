@@ -10,9 +10,9 @@ import {
 
 const faqData = [
   {
-    question: "What is DOTSLASH 9.0?",
+    question: "What is DOTSLASH 10.0?",
     answer:
-      "DOTSLASH 9.0 is a 30-hour, in-person hackathon hosted at SVNIT's beautiful campus. It's organized entirely by SVNIT students and provides a unique opportunity for developers worldwide to come together and use their skills to create useful innovations for society.",
+      "DOTSLASH 10.0 is a 30-hour, in-person hackathon hosted at SVNIT's beautiful campus. It's organized entirely by SVNIT students and provides a unique opportunity for developers worldwide to come together and use their skills to create useful innovations for society.",
     color: "#4B55FF",
     gradient:
       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 100%)",
@@ -20,7 +20,7 @@ const faqData = [
   {
     question: "Who can participate?",
     answer:
-      "DOTSLASH 9.0 is open to students, developers, designers, and innovators from all backgrounds. Whether you're a beginner or an experienced developer, you're welcome to join and contribute to building innovative solutions.",
+      "DOTSLASH 10.0 is open to students, developers, designers, and innovators from all backgrounds. Whether you're a beginner or an experienced developer, you're welcome to join and contribute to building innovative solutions.",
     color: "#4B55FF",
     gradient:
       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 100%)",
@@ -44,7 +44,7 @@ const faqData = [
   {
     question: "What are the prizes?",
     answer:
-      "DOTSLASH 9.0 offers exciting prizes for winners, including cash prizes, tech gadgets, and opportunities for mentorship and incubation. Specific prize details will be announced closer to the event date.",
+      "DOTSLASH 10.0 offers exciting prizes for winners, including cash prizes, tech gadgets, and opportunities for mentorship and incubation. Specific prize details will be announced closer to the event date.",
     color: "#4B55FF",
     gradient:
       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 100%)",
@@ -52,7 +52,7 @@ const faqData = [
   {
     question: "Is there a registration fee?",
     answer:
-      "There is absolutely NO registration fee, in fact, we'll be so generous as to provide ALL the shortlisted teams with their own custom DOTSLASH 9.0 merch.",
+      "There is absolutely NO registration fee, in fact, we'll be so generous as to provide ALL the shortlisted teams with their own custom DOTSLASH 10.0 merch.",
     color: "#4B55FF",
     gradient:
       "linear-gradient(135deg, rgba(75,85,255,0.15) 0%, rgba(75,85,255,0.05) 100%)",
