@@ -205,7 +205,7 @@ export default function AboutSection() {
               letterSpacing: "0.04em",
             }}
           >
-            21 - 22 March 2027
+            February 2027
           </p>
           <p
             style={{

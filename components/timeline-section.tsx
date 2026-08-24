@@ -3,7 +3,7 @@
 export default function TimelineSection() {
   const days = [
     {
-      dateLabel: "21st March",
+      dateLabel: "February 2027 - Day One",
       events: [
         { time: "8:00 AM – 9:00 AM", title: "Reporting & Breakfast" },
         { time: "9:30 AM", title: "Hacking Begins" },
@@ -21,7 +21,7 @@ export default function TimelineSection() {
       ],
     },
     {
-      dateLabel: "22nd March",
+      dateLabel: "February 2027 - Day Two",
       events: [
         { time: "1:30 AM – 2:00 AM", title: "High Tea" },
         { time: "7:30 AM – 8:30 AM", title: "Breakfast" },
@@ -131,7 +131,7 @@ export default function TimelineSection() {
             lineHeight: 1.6,
             fontFamily: "var(--font-sans)",
           }}>
-          21st–22nd March timelines for reporting, hacking, mentor rounds, and final presentations.
+          Febrary 2027 timelines for reporting, hacking, mentor rounds, and final presentations.
         </p>
 
         <div
