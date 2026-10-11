@@ -63,9 +63,8 @@ export default function Navbar({
 
   const handleDownloadBrochure = () => {
     const link = document.createElement("a");
-    link.href =
-      "https://drive.google.com/file/d/1qtsyyet1-XE5pB-ynJO2DKPbttll3B2E/view?usp=sharing";
-    link.download = "DOTSLASH-10.0-Brochure.pdf";
+    link.href = "/DotSlash-10.0-Brochure.pdf";
+    link.download = "DotSlash-10.0-Brochure.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

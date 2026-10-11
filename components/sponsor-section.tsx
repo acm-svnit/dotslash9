@@ -3,9 +3,15 @@
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const sponsors = [
+  "Devfolio",
+  "CodeCrafters",
+  "Vercel",
+  "Windsurf",
+  "ElevenLabs",
+  "Rovo",
+  ".xyz",
   "GitHub",
   "DigitalOcean",
-  "Devfolio",
   "ETHIndia",
   "CodingBlocks",
   "Beeceptor",
@@ -20,9 +26,15 @@ const sponsors = [
 ];
 
 const sponsorLogos: Record<string, string> = {
+  Devfolio: "/sponsors/devfolio.png",
+  CodeCrafters: "/sponsors/codecrafters.png",
+  Vercel: "/sponsors/vercel.png",
+  Windsurf: "/sponsors/windsurf.png",
+  ElevenLabs: "/sponsors/elevenlabs.png",
+  Rovo: "/sponsors/rovo.png",
+  ".xyz": "/sponsors/xyz.png",
   GitHub: "/sponsors/github.png",
   DigitalOcean: "/sponsors/digitalocean.png",
-  Devfolio: "/sponsors/devfolio.png",
   ETHIndia: "/sponsors/ethindia.png",
   CodingBlocks: "/sponsors/codingblocks.png",
   Beeceptor: "/sponsors/beeceptor.png",
