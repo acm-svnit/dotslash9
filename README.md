@@ -1,2 +1,3 @@
-Made with ❤️ by Team Dotslash and ACM
+Made with ❤️ by Team Dotslash and ACM.
+
 .
