@@ -61,13 +61,13 @@ export default function Navbar({
     }
   };
 
-  const handleDownloadBrochure = () => {
-    const link = document.createElement("a");
-    link.href = "/DotSlash_10.0.pdf";
-    link.download = "DotSlash_10.0.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const [showBrochureNotice, setShowBrochureNotice] = useState(false);
+
+  const handleBrochureClick = () => {
+    setShowBrochureNotice(true);
+    setTimeout(() => {
+      setShowBrochureNotice(false);
+    }, 2500);
   };
 
   return (
@@ -201,45 +201,66 @@ export default function Navbar({
           >
             Home
           </button>
-          <button
-            className="navbar-button"
-            onClick={handleDownloadBrochure}
-            style={{
-              backgroundColor: "transparent",
-              border: "1px solid rgba(75,85,255,0.5)",
-              borderRadius: "0",
-              padding: isMobile
-                ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
-                : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
-              color: "#fff",
-              fontFamily: "Upheav, sans-serif",
-              fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
-              transition: "all 0.3s ease",
-              whiteSpace: "nowrap",
-              lineHeight: "1.2",
-              width: isMobile
-                ? "clamp(60px, 18vw, 80px)"
-                : "clamp(80px, 12vw, 120px)",
-              minWidth: isMobile
-                ? "clamp(60px, 18vw, 80px)"
-                : "clamp(80px, 12vw, 120px)",
-              maxWidth: isMobile
-                ? "clamp(60px, 18vw, 80px)"
-                : "clamp(80px, 12vw, 120px)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
-              e.currentTarget.style.backgroundColor = "rgba(75,85,255,0.1)";
-              e.currentTarget.style.boxShadow = "0 0 20px rgba(75,85,255,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(75,85,255,0.5)";
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          >
-            Brochure
-          </button>
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <button
+              className="navbar-button"
+              onClick={handleBrochureClick}
+              title="Brochure - Coming Soon"
+              style={{
+                backgroundColor: "transparent",
+                border: "1px solid rgba(75,85,255,0.5)",
+                borderRadius: "0",
+                padding: isMobile
+                  ? "clamp(4px, 0.6vw, 6px) clamp(8px, 1.5vw, 12px)"
+                  : "clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px)",
+                color: "#fff",
+                fontFamily: "Upheav, sans-serif",
+                fontSize: isMobile ? "10px" : "clamp(12px, 1.8vw, 16px)",
+                transition: "all 0.3s ease",
+                whiteSpace: "nowrap",
+                lineHeight: "1.2",
+                width: isMobile
+                  ? "clamp(60px, 18vw, 80px)"
+                  : "clamp(80px, 12vw, 120px)",
+                minWidth: isMobile
+                  ? "clamp(60px, 18vw, 80px)"
+                  : "clamp(80px, 12vw, 120px)",
+                maxWidth: isMobile
+                  ? "clamp(60px, 18vw, 80px)"
+                  : "clamp(80px, 12vw, 120px)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75,85,255,0.8)";
+                e.currentTarget.style.backgroundColor = "rgba(75,85,255,0.1)";
+                e.currentTarget.style.boxShadow = "0 0 20px rgba(75,85,255,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(75,85,255,0.5)";
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              {showBrochureNotice ? "Soon!" : "Brochure"}
+            </button>
+            <span
+              style={{
+                position: "absolute",
+                top: isMobile ? "-6px" : "-8px",
+                right: isMobile ? "-4px" : "-6px",
+                backgroundColor: "rgba(75, 85, 255, 0.95)",
+                color: "#fff",
+                fontSize: isMobile ? "7px" : "9px",
+                fontFamily: "Upheav, sans-serif",
+                padding: isMobile ? "1px 3px" : "2px 5px",
+                letterSpacing: "0.5px",
+                boxShadow: "0 0 10px rgba(75, 85, 255, 0.6)",
+                pointerEvents: "none",
+                lineHeight: 1,
+              }}
+            >
+              SOON
+            </span>
+          </div>
           <button
             className="navbar-button"
             onClick={handleTimelineClick}
@@ -320,6 +341,30 @@ export default function Navbar({
           </button>
         </div>
       </nav>
+      {showBrochureNotice && (
+        <div
+          style={{
+            position: "fixed",
+            top: "calc(clamp(15px, 2vh, 20px) + 60px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "rgba(6, 0, 16, 0.95)",
+            border: "1px solid rgba(75, 85, 255, 0.8)",
+            boxShadow: "0 0 25px rgba(75, 85, 255, 0.5)",
+            color: "#fff",
+            padding: isMobile ? "6px 14px" : "8px 20px",
+            fontFamily: "Upheav, sans-serif",
+            fontSize: isMobile ? "11px" : "14px",
+            letterSpacing: "0.5px",
+            whiteSpace: "nowrap",
+            zIndex: 1001,
+            pointerEvents: "none",
+            borderRadius: "0",
+          }}
+        >
+          Brochure Coming Soon!
+        </div>
+      )}
     </>
   );
 }
