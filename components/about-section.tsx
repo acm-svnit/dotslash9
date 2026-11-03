@@ -34,21 +34,18 @@ const cardData = [
 const prizeData = [
   {
     title: "Second Prize",
-    amount: "30,000",
     asset: "/2.png",
-    containerClassName: "md:mt-0",
+    containerClassName: "order-2 md:order-1",
   },
   {
     title: "First Prize",
-    amount: "50,000",
     asset: "/1.png",
-    containerClassName: "md:mt-0",
+    containerClassName: "order-1 md:order-2",
   },
   {
     title: "Third Prize",
-    amount: "20,000",
     asset: "/3.png",
-    containerClassName: "md:mt-0",
+    containerClassName: "order-3 md:order-3",
   },
 ];
 
@@ -316,22 +313,11 @@ export default function AboutSection() {
                     fontWeight: "600",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
-                    marginBottom: "8px",
+                    marginBottom: "0px",
                   }}
                 >
                   {prize.title}
                 </p>
-                <h4
-                  style={{
-                    fontFamily: "Upheav, sans-serif",
-                    fontSize: "clamp(30px, 4.6vw, 46px)",
-                    color: "#fff",
-                    marginBottom: "2px",
-                    lineHeight: "1.1",
-                  }}
-                >
-                  {prize.amount}
-                </h4>
               </div>
             ))}
           </div>
