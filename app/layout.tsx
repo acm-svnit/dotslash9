@@ -4,6 +4,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/preloader";
 import { AudioProvider } from "@/contexts/audio-context";
+import { GameProvider } from "@/contexts/game-context";
+import MlhTrustBadge from "@/components/mlh-trust-badge";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -113,9 +115,12 @@ export default function RootLayout({
           }}
         />
         <AudioProvider>
-          <Preloader>
-            {children}
-          </Preloader>
+          <GameProvider>
+            <Preloader>
+              <MlhTrustBadge />
+              {children}
+            </Preloader>
+          </GameProvider>
         </AudioProvider>
       </body>
     </html>

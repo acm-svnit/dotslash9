@@ -356,3 +356,22 @@ main {
     transform: translate(-50%, -50%) translateY(-20px);
   }
 }
+
+#mlh-trust-badge {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 50px;
+  width: 10%;
+  max-width: 100px;
+  min-width: 60px;
+  z-index: 10000;
+}
+
+@media (max-width: 768px) {
+  #mlh-trust-badge {
+    right: 16px;
+    max-width: 75px;
+    min-width: 45px;
+  }
+}

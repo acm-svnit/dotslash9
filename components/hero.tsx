@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Game } from "@/components/game/game";
 import { gsap } from "gsap";
 import ShootingStars from "@/components/shooting-stars";
+import { useGame } from "@/contexts/game-context";
 
 type HeroProps = {
   bgReady?: boolean;
@@ -11,6 +12,7 @@ type HeroProps = {
 };
 
 export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }: HeroProps) {
+  const { setIsGameActive } = useGame();
   const [showGame, setShowGame] = useState(false);
   const [isGamePaused, setIsGamePaused] = useState(false);
   const [heroBgReady, setHeroBgReady] = useState(false);
@@ -26,6 +28,20 @@ export default function Hero({ bgReady: externalBgReady, onTextAnimationStart }:
 
   const text = "DOTSLASH 10.0";
   const letters = text.split("");
+
+  useEffect(() => {
+    setIsGameActive(showGame);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("dotslash:game-state", {
+          detail: { isPlaying: showGame },
+        })
+      );
+    }
+    return () => {
+      setIsGameActive(false);
+    };
+  }, [showGame, setIsGameActive]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
