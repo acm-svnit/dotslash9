@@ -375,3 +375,22 @@ main {
     min-width: 45px;
   }
 }
+
+/* Responsive Navbar classes */
+.navbar-desktop {
+  display: block;
+}
+
+.navbar-mobile-wrapper {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .navbar-desktop {
+    display: none !important;
+  }
+
+  .navbar-mobile-wrapper {
+    display: block !important;
+  }
+}
